@@ -38,6 +38,17 @@ typedef struct nodeMeja {
     struct nodeKartu *kartu;
 } nodeMeja;
 
+bool is_it_high_card(nodeKartu *head);
+bool is_it_one_pair(nodeKartu *head);
+bool is_it_two_pair(nodeKartu *head);
+bool is_it_three_of_a_kind(nodeKartu *head);
+bool is_it_straight(nodeKartu *head);
+bool is_it_flush(nodeKartu *head);
+bool is_it_full_house(nodeKartu *head);
+bool is_it_four_of_a_kind(nodeKartu *head);
+bool is_it_straight_flush(nodeKartu *head);
+bool is_it_royal_flush(nodeKartu *head);
+bool is_it_bomb(nodeKartu *headSementara, nodeKartu *headMeja);
 
 // Pemain akan dibuat dalam bentuk circular singly linked list
 // Meja dan dek akan dibuat dalam bentuk linear singly linked list
