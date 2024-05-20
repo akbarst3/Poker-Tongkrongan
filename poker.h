@@ -19,6 +19,18 @@ program description: Program tugas besar mata kuliah Struktur Data dan Algoritma
 #define As 14
 #define Two 15
 
+#define highCard 1
+#define onePair 2
+#define twoPair 3
+#define threeOfaKind 4
+#define straight 5
+#define flush 6
+#define fullHouse 7
+#define fourOfaKind 8
+#define straightFlush 9
+#define royalFlush 10
+#define bomb 20
+
 typedef struct nodePemain {
     char nama[100];
     int posisi;
@@ -38,6 +50,13 @@ typedef struct nodeMeja {
     struct nodeKartu *kartu;
 } nodeMeja;
 
+typedef struct pointKartu {
+    nodeKartu *head;
+    nodeKartu *tail;
+} pointKartu;
+
+int count_card(nodeKartu *dek);
+int cek_aturan(nodeMeja *dekMeja, nodeMeja *dekTemp);
 bool is_it_high_card(nodeKartu *head);
 bool is_it_one_pair(nodeKartu *head);
 bool is_it_two_pair(nodeKartu *head);
@@ -48,7 +67,7 @@ bool is_it_full_house(nodeKartu *head);
 bool is_it_four_of_a_kind(nodeKartu *head);
 bool is_it_straight_flush(nodeKartu *head);
 bool is_it_royal_flush(nodeKartu *head);
-bool is_it_bomb(nodeKartu *headSementara, nodeKartu *headMeja);
+bool is_it_bomb(nodeKartu *headTemp, nodeKartu *headMeja);
 
 // Pemain akan dibuat dalam bentuk circular singly linked list
 // Meja dan dek akan dibuat dalam bentuk linear singly linked list
