@@ -55,6 +55,7 @@ typedef struct pointKartu {
     nodeKartu *tail;
 } pointKartu;
 
+void insert_order(pointKartu *llKartu, nodeKartu *newNode);
 int count_card(nodeKartu *dek);
 int cek_aturan(nodeMeja *dekMeja, nodeMeja *dekTemp);
 bool is_it_high_card(nodeKartu *head);

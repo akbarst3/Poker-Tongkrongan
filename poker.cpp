@@ -9,6 +9,48 @@ program description: Program tugas besar mata kuliah Struktur Data dan Algoritma
 
 #include "poker.h"
 
+void insert_order(pointKartu *llKartu, nodeKartu *newNode)
+{
+    if (llKartu->head == NULL && llKartu->tail == NULL)
+    {
+        llKartu->head = newNode;
+        llKartu->tail = newNode;
+    }
+    else if (llKartu->head == llKartu->tail)
+    {
+        if (newNode->nilaikartu > llKartu->head->nilaikartu)
+        {
+            insert_last(llKartu, newNode);
+        }
+        else
+        {
+            newNode->next = llKartu->head;
+            llKartu->head = newNode;
+        }
+    }
+    else if (llKartu->tail->nilaikartu > newNode->nilaikartu)
+    {
+        nodeKartu *temp = llKartu->head;
+        while (temp->next != llKartu->tail)
+        {
+            temp = temp->next;
+        }
+        temp->next = newNode;
+        newNode->next = llKartu->tail;
+    }
+    else
+    {
+        insert_last(llKartu, newNode);
+    }
+}
+
+void insert_last(pointKartu *llKartu, nodeKartu *newNode)
+{
+    llKartu->tail->next = newNode;
+    llKartu->tail = newNode;
+    newNode->next = NULL;
+}
+
 int count_card(nodeKartu *head)
 {
     nodeKartu *temp = head;
