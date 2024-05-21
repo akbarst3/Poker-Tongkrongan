@@ -26,9 +26,9 @@ program description: Program tugas besar mata kuliah Struktur Data dan Algoritma
 #define straight 5
 #define flush 6
 #define fullHouse 7
-#define fourOfaKind 8
-#define straightFlush 9
-#define royalFlush 10
+#define straightFlush 8
+#define royalFlush 9
+#define fourOfaKind 10
 #define bomb 20
 
 typedef struct nodePemain {

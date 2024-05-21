@@ -21,49 +21,50 @@ int count_card(nodeKartu *head)
     count++;
     return count;
 }
-int cek_aturan(nodeMeja *dekMeja, nodeMeja *dekTemp)
+
+int cek_aturan(nodeMeja *dekTemp, nodeMeja *dekMeja)
 {
-    if (is_it_high_card(dekMeja->kartu))
+    if (is_it_high_card(dekTemp->kartu))
     {
         return highCard;
     }
-    else if (is_it_one_pair(dekMeja->kartu))
+    else if (is_it_one_pair(dekTemp->kartu))
     {
         return onePair;
     }
-    else if (is_it_two_pair(dekMeja->kartu))
+    else if (is_it_two_pair(dekTemp->kartu))
     {
         return twoPair;
     }
-    else if (is_it_three_of_a_kind(dekMeja->kartu))
+    else if (is_it_three_of_a_kind(dekTemp->kartu))
     {
         return threeOfaKind;
     }
-    else if (is_it_straight(dekMeja->kartu))
+    else if (is_it_straight(dekTemp->kartu))
     {
         return straight;
     }
-    else if (is_it_flush(dekMeja->kartu))
+    else if (is_it_flush(dekTemp->kartu))
     {
         return flush;
     }
-    else if (is_it_full_house(dekMeja->kartu))
+    else if (is_it_full_house(dekTemp->kartu))
     {
         return fullHouse;
     }
-    else if (is_it_four_of_a_kind(dekMeja->kartu))
+    else if (is_it_four_of_a_kind(dekTemp->kartu))
     {
         return fourOfaKind;
     }
-    else if (is_it_straight_flush(dekMeja->kartu))
+    else if (is_it_straight_flush(dekTemp->kartu))
     {
         return straightFlush;
     }
-    else if (is_it_royal_flush(dekMeja->kartu))
+    else if (is_it_royal_flush(dekTemp->kartu))
     {
         return royalFlush;
     }
-    else if (is_it_bomb(dekTemp->kartu, dekMeja->kartu))
+    else if (is_it_bomb(dekMeja->kartu, dekTemp->kartu))
     {
         return bomb;
     }
@@ -121,10 +122,7 @@ bool is_it_two_pair(nodeKartu *head)
             temp = temp->next;
         }
     }
-    else
-    {
-        return false;
-    }
+    return false;
 }
 
 bool is_it_three_of_a_kind(nodeKartu *head)
@@ -138,10 +136,8 @@ bool is_it_three_of_a_kind(nodeKartu *head)
             return true;
         }
     }
-    else
-    {
-        return false;
-    }
+
+    return false;
 }
 
 bool is_it_straight(nodeKartu *head)
@@ -216,10 +212,7 @@ bool is_it_full_house(nodeKartu *head)
         }
         return (hitungTiga == 1 && hitungDua == 1);
     }
-    else
-    {
-        return false;
-    }
+    return false;
 }
 
 bool is_it_four_of_a_kind(nodeKartu *head)
@@ -239,10 +232,8 @@ bool is_it_four_of_a_kind(nodeKartu *head)
         }
         return true;
     }
-    else
-    {
-        return false;
-    }
+
+    return false;
 }
 bool is_it_straight_flush(nodeKartu *head)
 {
@@ -257,7 +248,7 @@ bool is_it_royal_flush(nodeKartu *head)
 {
     if (is_it_flush(head))
     {
-        nodeKartu* temp = head;
+        nodeKartu *temp = head;
         while (temp->next != NULL)
         {
             temp = temp->next;
@@ -267,13 +258,20 @@ bool is_it_royal_flush(nodeKartu *head)
             return true;
         }
     }
-    else
-    {
-        return false;
-    }
+    return false;
 }
 
 bool is_it_bomb(nodeKartu *headTemp, nodeKartu *headMeja)
 {
-    
+    if (is_it_high_card(headMeja))
+    {
+        if (headMeja->nilaikartu == Two)
+        {
+            if (is_it_four_of_a_kind(headTemp))
+            {
+                return true;
+            }
+        }
+    }
+    return false;
 }
