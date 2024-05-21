@@ -64,51 +64,47 @@ int count_card(nodeKartu *head)
     return count;
 }
 
-int cek_aturan(nodeMeja *dekTemp, nodeMeja *dekMeja)
+int cek_aturan(nodeMeja *dek)
 {
-    if (is_it_high_card(dekTemp->kartu))
+    if (is_it_high_card(dek->kartu))
     {
         return highCard;
     }
-    else if (is_it_one_pair(dekTemp->kartu))
+    else if (is_it_one_pair(dek->kartu))
     {
         return onePair;
     }
-    else if (is_it_two_pair(dekTemp->kartu))
+    else if (is_it_two_pair(dek->kartu))
     {
         return twoPair;
     }
-    else if (is_it_three_of_a_kind(dekTemp->kartu))
+    else if (is_it_three_of_a_kind(dek->kartu))
     {
         return threeOfaKind;
     }
-    else if (is_it_straight(dekTemp->kartu))
+    else if (is_it_straight(dek->kartu))
     {
         return straight;
     }
-    else if (is_it_flush(dekTemp->kartu))
+    else if (is_it_flush(dek->kartu))
     {
         return flush;
     }
-    else if (is_it_full_house(dekTemp->kartu))
+    else if (is_it_full_house(dek->kartu))
     {
         return fullHouse;
     }
-    else if (is_it_four_of_a_kind(dekTemp->kartu))
+    else if (is_it_four_of_a_kind(dek->kartu))
     {
         return fourOfaKind;
     }
-    else if (is_it_straight_flush(dekTemp->kartu))
+    else if (is_it_straight_flush(dek->kartu))
     {
         return straightFlush;
     }
-    else if (is_it_royal_flush(dekTemp->kartu))
+    else if (is_it_royal_flush(dek->kartu))
     {
         return royalFlush;
-    }
-    else if (is_it_bomb(dekMeja->kartu, dekTemp->kartu))
-    {
-        return bomb;
     }
     else
     {

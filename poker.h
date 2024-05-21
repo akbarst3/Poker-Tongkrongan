@@ -57,7 +57,7 @@ typedef struct pointKartu {
 
 void insert_order(pointKartu *llKartu, nodeKartu *newNode);
 int count_card(nodeKartu *dek);
-int cek_aturan(nodeMeja *dekMeja, nodeMeja *dekTemp);
+int cek_aturan(nodeMeja *dek);
 bool is_it_high_card(nodeKartu *head);
 bool is_it_one_pair(nodeKartu *head);
 bool is_it_two_pair(nodeKartu *head);
@@ -68,7 +68,6 @@ bool is_it_full_house(nodeKartu *head);
 bool is_it_four_of_a_kind(nodeKartu *head);
 bool is_it_straight_flush(nodeKartu *head);
 bool is_it_royal_flush(nodeKartu *head);
-bool is_it_bomb(nodeKartu *headTemp, nodeKartu *headMeja);
 
 int compare_Meja(nodeMeja *asli, nodeMeja *sementara);
 
