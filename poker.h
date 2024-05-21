@@ -70,6 +70,8 @@ bool is_it_straight_flush(nodeKartu *head);
 bool is_it_royal_flush(nodeKartu *head);
 bool is_it_bomb(nodeKartu *headTemp, nodeKartu *headMeja);
 
+int compare_Meja(nodeMeja *asli, nodeMeja *sementara);
+
 // Pemain akan dibuat dalam bentuk circular singly linked list
 // Meja dan dek akan dibuat dalam bentuk linear singly linked list
 
