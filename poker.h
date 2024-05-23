@@ -26,34 +26,35 @@ program description: Program tugas besar mata kuliah Struktur Data dan Algoritma
 #define straight 5
 #define flush 6
 #define fullHouse 7
-#define straightFlush 8
-#define royalFlush 9
-#define fourOfaKind 10
+#define fourOfaKind 8
+#define straightFlush 9
+#define royalFlush 10
 #define bomb 20
-
-typedef struct nodePemain {
-    char nama[100];
-    int posisi;
-    int ronde;
-} nodePemain;
+#define totalKartu 52
 
 typedef struct nodeKartu {
     int nomorKartu;
-    int nilaikartu;
-    int TipeKartu;
+    int nilaiKartu;
+    int tipeKartu;
     struct nodeKartu *next;
 } nodeKartu;
+
+typedef struct pointKartu {
+    nodeKartu *head;
+    nodeKartu *tail;
+} pointKartu;
+
+typedef struct nodePemain {
+    char nama[100];
+    struct pointKartu kartu;
+    struct nodePemain *pemain;
+} nodePemain;
 
 typedef struct nodeMeja {
     int aturan;
     int nilaiTertinggi;
     struct nodeKartu *kartu;
 } nodeMeja;
-
-typedef struct pointKartu {
-    nodeKartu *head;
-    nodeKartu *tail;
-} pointKartu;
 
 void insert_order(pointKartu *llKartu, nodeKartu *newNode);
 int count_card(nodeKartu *dek);
