@@ -11,6 +11,7 @@ program description: Program tugas besar mata kuliah Struktur Data dan Algoritma
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <time.h>
 
 // Definisi dan Deklarasi
 #define Jack 11

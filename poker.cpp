@@ -196,19 +196,6 @@ void fill_deck(nodePemain **aktif, pointKartu *dekLL) {
     }
 }
 
-int main() {
-    pointKartu dekLL = {NULL, NULL};
-    nodePemain *aktif = NULL;
-
-    fill_the_card(&dekLL);
-    displayNode(dekLL.head);
-
-    create_player(&aktif, "Dzaki");
-    print_players(aktif);
-    fill_deck(&aktif, &dekLL);
-    printf("Tes");
-}
-
 int count_card(nodeKartu *head)
 {
     nodeKartu *temp = head;
