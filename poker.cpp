@@ -64,9 +64,49 @@ void fill_the_card(pointKartu *dekLL) {
     }
 }
 
-// void randomize_card (nodeKartu *dek) {
-    
-// }
+int count_card(nodeKartu *head)
+{
+    nodeKartu *temp = head;
+    int count = 0;
+    while (temp != NULL)
+    {
+        count++;
+        temp = temp->next;
+    }
+    count++;
+    return count;
+}
+
+nodeKartu* get_node_at(nodeKartu *head, int index) {
+    nodeKartu *current = head;
+    int count = 0;
+    while (current != NULL && count < index) {
+        current = current->next;
+        count++;
+    }
+    return current;
+}
+
+void shuffle_deck(pointKartu *dekLL) {
+    int count = count_card(dekLL->head);
+    if (count < 2) return;
+    srand(time(NULL));
+    for (int i = count - 1; i > 0; i--) {
+        int j = rand() % (i + 1);
+        if (i != j) {
+            // Tukar node ke-i dan node ke-j
+            nodeKartu *node_i = get_node_at(dekLL->head, i);
+            nodeKartu *node_j = get_node_at(dekLL->head, j);
+
+            int temp_nilai = node_i->nilaiKartu;
+            int temp_jenis = node_i->tipeKartu;
+            node_i->nilaiKartu = node_j->nilaiKartu;
+            node_i->tipeKartu = node_j->tipeKartu;
+            node_j->nilaiKartu = temp_nilai;
+            node_j->tipeKartu = temp_jenis;
+        }
+    }
+}
 
 void alloc_player (nodePemain **newNode, char nama[]) { 
     *newNode = (nodePemain *) malloc(sizeof(nodePemain));
@@ -103,16 +143,7 @@ void create_player (nodePemain **temp, char nama[]) {
     *temp = ujung;
 }
 
-void print_players(nodePemain *head) {
-    if (head == NULL) return;
-    nodePemain *current = head;
-    do {
-        printf("Nama Pemain: %s\n", current->nama);
-        current = current->pemain;
-    } while (current != head);
-}
-
-void displayNode (nodeKartu *head) { 
+void display_node (nodeKartu *head) { 
     nodeKartu *temp = head;
     printf("Linked List = ");
     while (temp != NULL) {
@@ -120,6 +151,16 @@ void displayNode (nodeKartu *head) {
         temp = temp->next;
     }
     printf("NULL\n");
+}
+
+void print_players(nodePemain *head) {
+    if (head == NULL) return;
+    nodePemain *current = head;
+    do {
+        printf("\nPemain : %s\n", current->nama);
+        display_node((current)->kartu.head);
+        current = current->pemain;
+    } while (current != head);
 }
 
 void insert_last(pointKartu *llKartu, nodeKartu *newNode)
@@ -166,6 +207,16 @@ void insert_order(pointKartu *llKartu, nodeKartu *newNode)
     }
 }
 
+void assign_number (nodeKartu *head) { 
+    nodeKartu *temp = head;
+    int count = 1;
+    while (temp != NULL) {
+        temp->nomorKartu = count;
+        count++;
+        temp = temp->next;
+    }
+}
+
 void fill_deck(nodePemain **aktif, pointKartu *dekLL) {
     nodeKartu *temp;
     int i, totalCard;
@@ -189,24 +240,12 @@ void fill_deck(nodePemain **aktif, pointKartu *dekLL) {
             totalCard++;
         }
         printf("\nPemain %d: %s\n", i, (*aktif)->nama);
-        displayNode((*aktif)->kartu.head);
+        assign_number((*aktif)->kartu.head);
+        display_node((*aktif)->kartu.head);
         *aktif = (*aktif)->pemain;
         totalCard = 1;
         i++;
     }
-}
-
-int count_card(nodeKartu *head)
-{
-    nodeKartu *temp = head;
-    int count = 0;
-    while (temp != head)
-    {
-        count++;
-        temp = temp->next;
-    }
-    count++;
-    return count;
 }
 
 int cek_aturan(nodeMeja *dek)

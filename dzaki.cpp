@@ -64,7 +64,6 @@ int count_card(nodeKartu *head) {
     return count;
 }
 
-// Fungsi untuk mendapatkan node ke-i dari linked list
 nodeKartu* get_node_at(nodeKartu *head, int index) {
     nodeKartu *current = head;
     int count = 0;
@@ -75,7 +74,6 @@ nodeKartu* get_node_at(nodeKartu *head, int index) {
     return current;
 }
 
-// Fungsi untuk mengocok deck
 void shuffle_deck(pointKartu *dekLL) {
     int count = count_card(dekLL->head);
     if (count < 2) return;
@@ -87,7 +85,6 @@ void shuffle_deck(pointKartu *dekLL) {
             nodeKartu *node_i = get_node_at(dekLL->head, i);
             nodeKartu *node_j = get_node_at(dekLL->head, j);
 
-            // Tukar nilai dan jenis
             int temp_nilai = node_i->nilaiKartu;
             int temp_jenis = node_i->tipeKartu;
             node_i->nilaiKartu = node_j->nilaiKartu;
