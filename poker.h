@@ -30,7 +30,6 @@ program description: Program tugas besar mata kuliah Struktur Data dan Algoritma
 #define fourOfaKind 8
 #define straightFlush 9
 #define royalFlush 10
-#define bomb 20
 #define totalKartu 52
 
 typedef struct nodeKartu {
@@ -54,7 +53,7 @@ typedef struct nodePemain {
 typedef struct nodeMeja {
     int aturan;
     int nilaiTertinggi;
-    struct nodeKartu *kartu;
+    struct pointKartu *llDeck;
 } nodeMeja;
 
 char type_assign (int jenis);
@@ -77,17 +76,15 @@ void display_player(nodeKartu *head);
 int get_card_count(nodeKartu *head);
 void print_players2(nodePemain *head);
 
-int cek_aturan(nodeMeja *dek);
-bool is_it_high_card(nodeKartu *head);
-bool is_it_one_pair(nodeKartu *head);
-bool is_it_two_pair(nodeKartu *head);
-bool is_it_three_of_a_kind(nodeKartu *head);
-bool is_it_straight(nodeKartu *head);
-bool is_it_flush(nodeKartu *head);
-bool is_it_full_house(nodeKartu *head);
-bool is_it_four_of_a_kind(nodeKartu *head);
-bool is_it_straight_flush(nodeKartu *head);
-bool is_it_royal_flush(nodeKartu *head);
+int cek_aturan(nodeMeja *dek, int *highest);
+bool is_it_high_card(pointKartu *deck);
+bool is_it_three_of_a_kind(pointKartu *deck);
+bool is_it_straight(pointKartu *deck);
+bool is_it_flush(pointKartu *deck);
+bool is_it_full_house(pointKartu *deck, int *highest);
+bool is_it_four_of_a_kind(pointKartu *deck);
+bool is_it_straight_flush(pointKartu *deck);
+bool is_it_royal_flush(pointKartu *deck);
 
 int compare_Meja(nodeMeja *asli, nodeMeja *sementara);
 
