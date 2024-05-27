@@ -602,12 +602,12 @@ int compare_Meja(nodeMeja *asli, nodeMeja *sementara)
     int cekBreak = 0;
     // Jika cekBreak = 2, maka game akan selesai (bom)
     // Jika cekBreak = 1, maka akan terjadi perpindahan dari dek meja sementara menjadi dek meja asli
-    // Jika cekBreak = 0, maka tidak akan terjadi perpindahan
+    // Jika cekBreak = 0, maka tidak akan terjadi perpindahan 
     if (asli->aturan == 0)
     {
         asli->aturan = sementara->aturan;
         asli->nilaiTertinggi = sementara->nilaiTertinggi;
-        asli->kartu = sementara->kartu;
+        asli->llDeck = sementara->llDeck;
         cekBreak = 1;
         return cekBreak;
     }
@@ -616,16 +616,16 @@ int compare_Meja(nodeMeja *asli, nodeMeja *sementara)
     {
         asli->aturan = sementara->aturan;
         asli->nilaiTertinggi = sementara->nilaiTertinggi;
-        asli->kartu = sementara->kartu;
+        asli->llDeck = sementara->llDeck;
         cekBreak = 2;
         return cekBreak;
     }
 
     if (asli->nilaiTertinggi < sementara->nilaiTertinggi && asli->aturan == sementara->aturan)
     {
-
+        
         asli->nilaiTertinggi = sementara->nilaiTertinggi;
-        asli->kartu = sementara->kartu;
+        asli->llDeck = sementara->llDeck;
         cekBreak = 1;
         return cekBreak;
     }
