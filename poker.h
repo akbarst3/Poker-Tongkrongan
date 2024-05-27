@@ -21,15 +21,14 @@ program description: Program tugas besar mata kuliah Struktur Data dan Algoritma
 #define Two 15
 
 #define highCard 1
-#define onePair 2
-#define twoPair 3
-#define threeOfaKind 4
-#define straight 5
-#define flush 6
-#define fullHouse 7
-#define fourOfaKind 8
-#define straightFlush 9
-#define royalFlush 10
+#define pair 2
+#define threeOfaKind 3
+#define straight 4
+#define flush 5
+#define fullHouse 6
+#define fourOfaKind 7
+#define straightFlush 8
+#define royalFlush 9
 #define totalKartu 52
 
 typedef struct nodeKartu {
@@ -78,16 +77,27 @@ void print_game_computers(nodePemain *head);
 void print_game_player(nodePemain *head);
 
 int cek_aturan(nodeMeja *dek, int *highest);
-bool is_it_high_card(pointKartu *deck);
-bool is_it_three_of_a_kind(pointKartu *deck);
-bool is_it_straight(pointKartu *deck);
-bool is_it_flush(pointKartu *deck);
+bool is_it_high_card(pointKartu *deck, int * highest);
+bool is_it_pair(pointKartu *deck, int *highest);
+bool is_it_three_of_a_kind(pointKartu *deck, int * highest);
+bool is_it_straight(pointKartu *deck, int *highest);
+bool is_it_flush(pointKartu *deck, int * highest);
 bool is_it_full_house(pointKartu *deck, int *highest);
-bool is_it_four_of_a_kind(pointKartu *deck);
-bool is_it_straight_flush(pointKartu *deck);
-bool is_it_royal_flush(pointKartu *deck);
+bool is_it_four_of_a_kind(pointKartu *deck, int * highest);
+bool is_it_straight_flush(pointKartu *deck, int * highest);
+bool is_it_royal_flush(pointKartu *deck, int * highest);
 
 int compare_Meja(nodeMeja *asli, nodeMeja *sementara);
+bool computer_turn(nodeMeja *dekMeja, nodeMeja *dekTemp, nodePemain *com);
+void set_tail(pointKartu *llComb, int card);
+void reset_ll_comb(pointKartu *llComb, nodePemain *com);
+bool five_cards_comb(pointKartu *llComb, nodeMeja *dekMeja, nodeMeja *dekTemp);
+bool four_cards_comb(pointKartu *llComb, nodeMeja *dekMeja, nodeMeja *dekTemp);
+bool three_cards_comb(pointKartu *llComb, nodeMeja *dekMeja, nodeMeja *dekTemp);
+bool two_cards_comb(pointKartu *llComb, nodeMeja *dekMeja, nodeMeja *dekTemp);
+bool high_card_fight(pointKartu *llComb, nodeMeja *dekMeja, nodeMeja *dekTemp);
+void get_llComb(nodePemain *com, pointKartu *llComb, nodeMeja *dekMeja);
+
 
 // Pemain akan dibuat dalam bentuk circular singly linked list
 // Meja dan dek akan dibuat dalam bentuk linear singly linked list

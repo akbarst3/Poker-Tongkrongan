@@ -465,23 +465,23 @@ void print_game_player(nodePemain *head){
 
 int cek_aturan(nodeMeja *dek, int *highest)
 {
-    if (is_it_high_card(dek->llDeck))
+    if (is_it_high_card(dek->llDeck, highest))
     {
         return highCard;
     }
-    else if (is_it_one_pair(dek->llDeck))
+    else if (is_it_pair(dek->llDeck, highest))
     {
-        return onePair;
+        return pair;
     }
-    else if (is_it_three_of_a_kind(dek->llDeck))
+    else if (is_it_three_of_a_kind(dek->llDeck, highest))
     {
         return threeOfaKind;
     }
-    else if (is_it_straight(dek->llDeck))
+    else if (is_it_straight(dek->llDeck, highest))
     {
         return straight;
     }
-    else if (is_it_flush(dek->llDeck))
+    else if (is_it_flush(dek->llDeck, highest))
     {
         return flush;
     }
@@ -489,15 +489,15 @@ int cek_aturan(nodeMeja *dek, int *highest)
     {
         return fullHouse;
     }
-    else if (is_it_four_of_a_kind(dek->llDeck))
+    else if (is_it_four_of_a_kind(dek->llDeck, highest))
     {
         return fourOfaKind;
     }
-    else if (is_it_straight_flush(dek->llDeck))
+    else if (is_it_straight_flush(dek->llDeck, highest))
     {
         return straightFlush;
     }
-    else if (is_it_royal_flush(dek->llDeck))
+    else if (is_it_royal_flush(dek->llDeck, highest))
     {
         return royalFlush;
     }
@@ -507,25 +507,27 @@ int cek_aturan(nodeMeja *dek, int *highest)
     }
 }
 
-bool is_it_high_card(pointKartu *deck)
+bool is_it_high_card(pointKartu *deck, int *highest)
 {
     if (deck->head == deck->tail)
     {
+        *highest = deck->head->nilaiKartu;
         return true;
     }
     return false;
 }
 
-bool is_it_one_pair(pointKartu *deck)
+bool is_it_pair(pointKartu *deck, int *highest)
 {
     if (deck->head->next == deck->tail && deck->head->nilaiKartu == deck->tail->nilaiKartu)
     {
+        *highest = deck->head->nilaiKartu;
         return true;
     }
     return false;
 }
 
-bool is_it_three_of_a_kind(pointKartu *deck)
+bool is_it_three_of_a_kind(pointKartu *deck, int *highest)
 {
     int nilai = deck->head->nilaiKartu;
     nodeKartu *temp = deck->head;
@@ -537,10 +539,11 @@ bool is_it_three_of_a_kind(pointKartu *deck)
             return false;
         }
     }
+    *highest = deck->head->nilaiKartu;
     return true;
 }
 
-bool is_it_straight(pointKartu *deck)
+bool is_it_straight(pointKartu *deck, int *highest)
 {
     nodeKartu *temp = deck->head;
     while (temp != deck->tail->next)
@@ -551,10 +554,11 @@ bool is_it_straight(pointKartu *deck)
         }
         temp = temp->next;
     }
+    *highest = deck->tail->nilaiKartu;
     return true;
 }
 
-bool is_it_flush(pointKartu *deck)
+bool is_it_flush(pointKartu *deck, int *highest)
 {
     nodeKartu *temp = deck->head;
     while (temp != deck->tail->next)
@@ -565,6 +569,7 @@ bool is_it_flush(pointKartu *deck)
         }
         temp = temp->next;
     }
+    *highest = deck->tail->nilaiKartu;
     return true;
 }
 
@@ -581,7 +586,7 @@ bool is_it_full_house(pointKartu *deck, int *highest)
     int hitungTiga = 0;
     int hitungDua = 0;
 
-    for (int i = 1; i <= 15; i++)
+    for (int i = 3; i <= 15; i++)
     {
         if (frekuensi[i] == 3)
         {
@@ -600,7 +605,7 @@ bool is_it_full_house(pointKartu *deck, int *highest)
     return false;
 }
 
-bool is_it_four_of_a_kind(pointKartu *deck)
+bool is_it_four_of_a_kind(pointKartu *deck, int *highest)
 {
     int nilai = deck->head->nilaiKartu;
     nodeKartu *temp = deck->head;
@@ -612,30 +617,34 @@ bool is_it_four_of_a_kind(pointKartu *deck)
         }
         temp = temp->next;
     }
+    *highest = deck->tail->nilaiKartu;
     return true;
 }
 
-bool is_it_straight_flush(pointKartu *deck)
+bool is_it_straight_flush(pointKartu *deck, int *highest)
 {
     nodeKartu *head = deck->head;
-    if (is_it_flush(deck) && is_it_straight(deck))
+    if (is_it_flush(deck, highest) && is_it_straight(deck, highest))
     {
+        *highest = deck->tail->nilaiKartu;
         return true;
     }
     return false;
 }
 
-bool is_it_royal_flush(pointKartu *deck)
+bool is_it_royal_flush(pointKartu *deck, int *highest)
 {
-    if (is_it_flush(deck) && is_it_straight(deck))
+    if (is_it_flush(deck, highest) && is_it_straight(deck, highest))
     {
-        if (deck->tail->nilaiKartu == As || deck->tail->nilaiKartu == Two)
+        if (deck->tail->nilaiKartu == As || deck->tail->nilaiKartu == King)
         {
+            *highest = deck->tail->nilaiKartu;
             return true;
         }
     }
     return false;
 }
+
 
 int compare_Meja(nodeMeja *asli, nodeMeja *sementara)
 {
@@ -647,7 +656,7 @@ int compare_Meja(nodeMeja *asli, nodeMeja *sementara)
     {
         asli->aturan = sementara->aturan;
         asli->nilaiTertinggi = sementara->nilaiTertinggi;
-        asli->kartu = sementara->kartu;
+        asli->llDeck = sementara->llDeck;
         cekBreak = 1;
         return cekBreak;
     }
@@ -656,7 +665,7 @@ int compare_Meja(nodeMeja *asli, nodeMeja *sementara)
     {
         asli->aturan = sementara->aturan;
         asli->nilaiTertinggi = sementara->nilaiTertinggi;
-        asli->kartu = sementara->kartu;
+        asli->llDeck = sementara->llDeck;
         cekBreak = 2;
         return cekBreak;
     }
@@ -665,7 +674,7 @@ int compare_Meja(nodeMeja *asli, nodeMeja *sementara)
     {
 
         asli->nilaiTertinggi = sementara->nilaiTertinggi;
-        asli->kartu = sementara->kartu;
+        asli->llDeck = sementara->llDeck;
         cekBreak = 1;
         return cekBreak;
     }
@@ -676,4 +685,325 @@ int compare_Meja(nodeMeja *asli, nodeMeja *sementara)
         return cekBreak;
     }
     return cekBreak;
+}
+
+bool computer_turn(nodeMeja *dekMeja, nodeMeja *dekTemp, nodePemain *com)
+{
+    pointKartu *llComb = (pointKartu *)malloc(sizeof(pointKartu));
+    reset_ll_comb(llComb, com);
+    bool result = 1;
+
+    if (dekMeja->aturan == 0)
+    {
+        if (five_cards_comb(llComb, dekMeja, dekTemp) ||
+            three_cards_comb(llComb, dekMeja, dekTemp) ||
+            two_cards_comb(llComb, dekMeja, dekTemp))
+        {
+            get_llComb(com, llComb, dekMeja);
+            dekMeja->aturan = dekTemp->aturan;
+            dekMeja->nilaiTertinggi = dekTemp->nilaiTertinggi;
+        }
+        else
+        {
+            llComb->head = com->kartu.head;
+            llComb->tail = com->kartu.head;
+            dekMeja->llDeck = llComb;
+        }
+    }
+    else
+    {
+        switch (dekMeja->aturan)
+        {
+        case highCard:
+            result = high_card_fight(llComb, dekMeja, dekTemp);
+            break;
+        case pair:
+            result = two_cards_comb(llComb, dekMeja, dekTemp);
+            break;
+        case threeOfaKind:
+            result = three_cards_comb(llComb, dekMeja, dekTemp);
+            break;
+        default:
+            result = five_cards_comb(llComb, dekMeja, dekTemp);
+            break;
+        }
+
+        if (result)
+        {
+            get_llComb(com, llComb, dekMeja);
+            dekMeja->aturan = dekTemp->aturan;
+            dekMeja->nilaiTertinggi = dekTemp->nilaiTertinggi;
+        }
+        else
+        {
+            dekTemp->llDeck->head = NULL;
+            dekTemp->llDeck->tail = NULL;
+        }
+    }
+
+    free(llComb);
+    return result;
+}
+
+void set_tail(pointKartu *llComb, int card)
+{
+    int jumlah = 0;
+    nodeKartu *temp = llComb->head;
+    while (jumlah < card && temp != NULL)
+    {
+        temp = temp->next;
+        jumlah++;
+    }
+    llComb->tail = temp;
+}
+
+void reset_ll_comb(pointKartu *llComb, nodePemain *com)
+{
+    llComb->head = com->kartu.head;
+    llComb->tail = NULL;
+}
+
+bool five_cards_comb(pointKartu *llComb, nodeMeja *dekMeja, nodeMeja *dekTemp)
+{
+    nodeKartu *temp = llComb->head;
+    bool result = false;
+
+    if (dekMeja->aturan <= 8 && dekMeja->aturan >= 4)
+    {
+        set_tail(llComb, 5);
+        while (llComb->tail != NULL)
+        {
+            if (is_it_straight_flush(llComb, &(dekMeja->nilaiTertinggi)) && dekMeja->aturan <= straightFlush)
+            {
+                if (dekTemp->nilaiTertinggi == dekMeja->nilaiTertinggi)
+                {
+                    if (dekTemp->llDeck->tail->tipeKartu > dekMeja->llDeck->tail->tipeKartu)
+                    {
+                        dekTemp->aturan = 8;
+                        result = true;
+                        break;
+                    }
+                }
+                else if (dekTemp->nilaiTertinggi > dekMeja->nilaiTertinggi)
+                {
+                    dekTemp->aturan = 8;
+                    result = true;
+                    break;
+                }
+            }
+            else if (is_it_royal_flush(llComb, &(dekMeja->nilaiTertinggi)) && dekMeja->aturan <= royalFlush)
+            {
+                if (dekTemp->llDeck->tail->tipeKartu > dekMeja->llDeck->tail->tipeKartu)
+                {
+                    dekTemp->aturan = 9;
+                    result = true;
+                    break;
+                }
+            }
+            llComb->head = llComb->head->next;
+            llComb->tail = llComb->tail->next;
+        }
+    }
+
+    if (!result)
+    {
+        llComb->head = temp;
+        set_tail(llComb, 5);
+        while (llComb->tail != NULL)
+        {
+            if (dekMeja->aturan <= straight)
+            {
+                if (is_it_straight(llComb, &(dekTemp->nilaiTertinggi)))
+                {
+                    if (dekMeja->aturan == 0)
+                    {
+                        dekTemp->aturan = 4;
+                        result = true;
+                        break;
+                    }
+                    else if (dekTemp->nilaiTertinggi == dekMeja->nilaiTertinggi)
+                    {
+                        if (dekTemp->llDeck->tail->tipeKartu > dekMeja->llDeck->tail->tipeKartu)
+                        {
+                            dekTemp->aturan = 4;
+                            result = true;
+                            break;
+                        }
+                    }
+                    else if (dekTemp->nilaiTertinggi > dekMeja->nilaiTertinggi)
+                    {
+                        dekTemp->aturan = 4;
+                        result = true;
+                        break;
+                    }
+                }
+            }
+            if (dekMeja->aturan <= flush)
+            {
+                if (is_it_flush(llComb, &(dekTemp->nilaiTertinggi)))
+                {
+                    if (dekMeja->aturan == 0)
+                    {
+                        dekTemp->aturan = 5;
+                        result = true;
+                        break;
+                    }
+                    else if (dekTemp->nilaiTertinggi == dekMeja->nilaiTertinggi)
+                    {
+                        if (dekTemp->llDeck->tail->tipeKartu > dekMeja->llDeck->tail->tipeKartu)
+                        {
+                            dekTemp->aturan = 5;
+                            result = true;
+                            break;
+                        }
+                    }
+                    else if (dekTemp->nilaiTertinggi > dekMeja->nilaiTertinggi)
+                    {
+                        dekTemp->aturan = 5;
+                        result = true;
+                        break;
+                    }
+                }
+            }
+            if (dekMeja->aturan <= fullHouse)
+            {
+                if (is_it_full_house(llComb, &(dekTemp->nilaiTertinggi)))
+                {
+                    if (dekMeja->aturan == 0)
+                    {
+                        dekTemp->aturan = 6;
+                        result = true;
+                        break;
+                    }
+                    else if (dekTemp->nilaiTertinggi == dekMeja->nilaiTertinggi)
+                    {
+                        if (dekTemp->llDeck->tail->tipeKartu > dekMeja->llDeck->tail->tipeKartu)
+                        {
+                            dekTemp->aturan = 6;
+                            result = true;
+                            break;
+                        }
+                    }
+                    else if (dekTemp->nilaiTertinggi > dekMeja->nilaiTertinggi)
+                    {
+                        dekTemp->aturan = 6;
+                        result = true;
+                        break;
+                    }
+                }
+            }
+            llComb->head = llComb->head->next;
+            llComb->tail = llComb->tail->next;
+        }
+    }
+    return result;
+}
+
+bool four_cards_comb(pointKartu *llComb, nodeMeja *dekMeja, nodeMeja *dekTemp)
+{
+    set_tail(llComb, 4);
+    while (llComb->tail != NULL)
+    {
+        if (is_it_four_of_a_kind(llComb, &(dekTemp->nilaiTertinggi)))
+        {
+            dekTemp->aturan = 7;
+            return true;
+        }
+        llComb->head = llComb->head->next;
+        llComb->tail = llComb->tail->next;
+    }
+    return false;
+}
+
+bool three_cards_comb(pointKartu *llComb, nodeMeja *dekMeja, nodeMeja *dekTemp)
+{
+    set_tail(llComb, 3);
+    while (llComb->tail != NULL)
+    {
+        if (is_it_three_of_a_kind(llComb, &(dekTemp->nilaiTertinggi)))
+        {
+            if (dekMeja->aturan == 0)
+            {
+                dekTemp->aturan = 3;
+                return true;
+            }
+            else if (dekTemp->nilaiTertinggi == dekMeja->nilaiTertinggi)
+            {
+                if (dekTemp->llDeck->tail->tipeKartu > dekMeja->llDeck->tail->tipeKartu)
+                {
+                    dekTemp->aturan = 3;
+                    return true;
+                }
+            }
+        }
+        llComb->head = llComb->head->next;
+        llComb->tail = llComb->tail->next;
+    }
+    return false;
+}
+
+bool two_cards_comb(pointKartu *llComb, nodeMeja *dekMeja, nodeMeja *dekTemp)
+{
+    set_tail(llComb, 2);
+    while (llComb->tail != NULL)
+    {
+        if (is_it_pair(llComb, &(dekTemp->nilaiTertinggi)))
+        {
+            if (dekMeja->aturan == 0)
+            {
+                dekTemp->aturan = 2;
+                return true;
+            }
+            else if (dekTemp->nilaiTertinggi == dekMeja->nilaiTertinggi)
+            {
+                if (dekTemp->llDeck->tail->tipeKartu > dekMeja->llDeck->tail->tipeKartu)
+                {
+                    dekTemp->aturan = 2;
+                    return true;
+                }
+            }
+        }
+        llComb->head = llComb->head->next;
+        llComb->tail = llComb->tail->next;
+    }
+    return false;
+}
+
+bool high_card_fight(pointKartu *llComb, nodeMeja *dekMeja, nodeMeja *dekTemp)
+{
+    set_tail(llComb, 1);
+    while (llComb->tail != NULL)
+    {
+        if (is_it_high_card(llComb, &(dekTemp->nilaiTertinggi)))
+        {
+            if (dekMeja->aturan == 0)
+            {
+                dekTemp->aturan = 1;
+                return true;
+            }
+            else if (dekTemp->nilaiTertinggi == dekMeja->nilaiTertinggi)
+            {
+                if (dekTemp->llDeck->tail->tipeKartu > dekMeja->llDeck->tail->tipeKartu)
+                {
+                    dekTemp->aturan = 1;
+                    return true;
+                }
+            }
+        }
+        llComb->head = llComb->head->next;
+        llComb->tail = llComb->tail->next;
+    }
+    return false;
+}
+
+void get_llComb(nodePemain *com, pointKartu *llComb, nodeMeja *dekMeja)
+{
+    nodeKartu *temp = com->kartu.head;
+    while (temp->next != llComb->head)
+    {
+        temp = temp->next;
+    }
+    temp->next = llComb->tail->next;
+    dekMeja->llDeck->head = llComb->head;
+    dekMeja->llDeck->tail = llComb->tail;
 }
