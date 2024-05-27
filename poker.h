@@ -74,7 +74,8 @@ nodePemain *first_play(nodePemain *aktif);
 void display_card(nodeKartu *card);
 void display_player(nodeKartu *head);
 int get_card_count(nodeKartu *head);
-void print_players2(nodePemain *head);
+void print_game_computers(nodePemain *head);
+void print_game_player(nodePemain *head);
 
 int cek_aturan(nodeMeja *dek, int *highest);
 bool is_it_high_card(pointKartu *deck);
