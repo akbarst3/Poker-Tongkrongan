@@ -163,47 +163,41 @@ void print_players(nodePemain *head) {
     } while (current != head);
 }
 
-void insert_last(pointKartu *llKartu, nodeKartu *newNode)
-{
-    llKartu->tail->next = newNode;
+void insert_last(pointKartu *llKartu, nodeKartu *newNode) {
+    if (llKartu->tail != NULL) {
+        llKartu->tail->next = newNode;
+    }
     llKartu->tail = newNode;
     newNode->next = NULL;
+
+    if (llKartu->head == NULL) {
+        llKartu->head = newNode;
+    }
 }
 
-void insert_order(pointKartu *llKartu, nodeKartu *newNode)
-{
-    printf("Tes4");
-    if (llKartu->head == NULL && llKartu->tail == NULL)
-    {
+void insert_order(pointKartu *llKartu, nodeKartu *newNode) {
+    if (llKartu->head == NULL) {
+        // Linked list kosong
         llKartu->head = newNode;
         llKartu->tail = newNode;
-        printf("Tes4");
-    }
-    else if (llKartu->head == llKartu->tail)
-    {
-        if (newNode->nilaiKartu > llKartu->head->nilaiKartu)
-        {
-            insert_last(llKartu, newNode);
+        newNode->next = NULL;
+    } else if (newNode->nilaiKartu <= llKartu->head->nilaiKartu) {
+        // Insert di depan
+        newNode->next = llKartu->head;
+        llKartu->head = newNode;
+    } else {
+        // Insert di tengah atau belakang
+        nodeKartu *current = llKartu->head;
+        while (current->next != NULL && current->next->nilaiKartu < newNode->nilaiKartu) {
+            current = current->next;
         }
-        else
-        {
-            newNode->next = llKartu->head;
-            llKartu->head = newNode;
+        newNode->next = current->next;
+        current->next = newNode;
+
+        // Update tail jika newNode dimasukkan di belakang
+        if (newNode->next == NULL) {
+            llKartu->tail = newNode;
         }
-    }
-    else if (llKartu->tail->nilaiKartu > newNode->nilaiKartu)
-    {
-        nodeKartu *temp = llKartu->head;
-        while (temp->next != llKartu->tail)
-        {
-            temp = temp->next;
-        }
-        temp->next = newNode;
-        newNode->next = llKartu->tail;
-    }
-    else
-    {
-        insert_last(llKartu, newNode);
     }
 }
 
@@ -220,32 +214,148 @@ void assign_number (nodeKartu *head) {
 void fill_deck(nodePemain **aktif, pointKartu *dekLL) {
     nodeKartu *temp;
     int i, totalCard;
-    totalCard = 1; 
-    i = 1;
-    while (i <= 4)
-    {
-        printf("Tes1");
-        while (totalCard <= 13)
-        {
-            printf("Tes2");
+
+    for (i = 1; i <= 4; i++) {
+        totalCard = 0; // Inisialisasi totalCard dengan 0
+        printf("Distribusi kartu untuk pemain %d: %s\n", i, (*aktif)->nama);
+        while (totalCard < 13) { // Kondisi loop berubah ke < 13
             if (dekLL->head == NULL) {
-                printf("Deck is empty!\n");
+                printf("Deck kosong!\n");
                 return;
             }
+            // Ambil kartu dari deck
             temp = dekLL->head;
             dekLL->head = dekLL->head->next;
             temp->next = NULL;
+
+            // Masukkan kartu ke pemain
             insert_order(&((*aktif)->kartu), temp);
-            printf("Tes3");
+
+            printf("Kartu %d: %d | %c\n", totalCard + 1, temp->nilaiKartu, temp->tipeKartu); // Debugging line
             totalCard++;
         }
-        printf("\nPemain %d: %s\n", i, (*aktif)->nama);
+        printf("Kartu pemain %s setelah distribusi:\n", (*aktif)->nama);
         assign_number((*aktif)->kartu.head);
-        display_node((*aktif)->kartu.head);
-        *aktif = (*aktif)->pemain;
-        totalCard = 1;
-        i++;
+        display_node((*aktif)->kartu.head); // Pastikan nama fungsi benar, display_node atau displayNode
+        *aktif = (*aktif)->pemain;  // Pindah ke pemain berikutnya
     }
+}
+
+nodePemain *first_play(nodePemain *aktif) {
+    nodePemain *winner = NULL;
+    nodeKartu *temp, *prev;
+    int i, totalCard;
+
+    for (i = 1; i <= 4; i++) {
+        temp = aktif->kartu.head;
+        prev = NULL;
+        totalCard = 0; 
+        while (totalCard < 13 && temp != NULL) {  // Corrected condition: < 13 instead of <= 13
+            printf("Nilai = %d\n", temp->nilaiKartu); // Debugging line
+
+            if (temp->nilaiKartu == 3) {
+                printf("Singa\n"); // Debugging line
+                // Menetapkan pemenang jika tipeKartu adalah 'D'
+                if (temp->tipeKartu == 'D') {
+                    winner = aktif;
+                }
+
+                // Menghapus node dari linked list
+                nodeKartu* nodeToFree = temp;
+                if (temp == aktif->kartu.head) {
+                    aktif->kartu.head = temp->next;
+                    if (aktif->kartu.head == NULL) {
+                        aktif->kartu.tail = NULL;
+                    }
+                    temp = temp->next; // Move to the next node
+                } else if (temp == aktif->kartu.tail) {
+                    prev->next = NULL;
+                    aktif->kartu.tail = prev;
+                    temp = NULL; // End the loop
+                } else {
+                    if (prev != NULL) {
+                        prev->next = temp->next;
+                    }
+                    temp = temp->next; // Move to the next node
+                }
+                free(nodeToFree);
+            } else {
+                prev = temp;
+                temp = temp->next;
+            }
+            totalCard++;
+        }
+        // Pindah ke pemain berikutnya dalam linked list circular
+        aktif = aktif->pemain;
+    }
+    return winner;
+}
+
+void display_card(nodeKartu *card) {
+    printf("----------\n");
+    printf("|%6d |\n", card->nomorKartu);
+    printf("|%-8s|\n", card->tipeKartu);
+    printf("|%6d |\n", card->nilaiKartu);
+    printf("----------\n");
+}
+
+void display_player(nodeKartu *head) {
+    nodeKartu *current = head;
+    int count = 0;
+    while (current != NULL && count < 13) {
+        display_card(current);
+        current = current->next;
+        count++;
+    }
+}
+
+int get_card_count(nodeKartu *head) {
+    int count = 0;
+    nodeKartu *current = head;
+    while (current != NULL) {
+        count++;
+        current = current->next;
+    }
+    return count;
+}
+
+void print_players2(nodePemain *head) {
+    if (head == NULL) return;
+    
+    nodePemain *current = head;
+
+    // Bagian Atas - Komputer
+    printf("\nKomputer:\n");
+    do {
+        printf("----------\n");
+        printf("| %-6s |\n", current->nama);
+        if (current->kartu.head != NULL) {
+            printf("| Total: %2d |\n", get_card_count(current->kartu.head));
+        } else {
+            printf("| No cards |\n");
+        }
+        printf("----------\n");
+        current = current->pemain;
+    } while (current != head && strncmp(current->nama, "player", 6) != 0);
+    
+    // // Bagian Tengah - Table (Kosong untuk saat ini)
+    // printf("\nTable:\n");
+    // printf("----------\n");
+    // printf("|        |\n");
+    // printf("|        |\n");
+    // printf("|        |\n");
+    // printf("----------\n");
+
+    // // Bagian Bawah - Pemain
+    // printf("\nPlayer:\n");
+    // current = head;
+    // do {
+    //     if (strncmp(current->nama, "Dzaki", 6) == 0) {
+    //         printf("Nama: %s\n", current->nama);
+    //         display_node(current->kartu.head);
+    //     }
+    //     current = current->pemain;
+    // } while (current != head);
 }
 
 int cek_aturan(nodeMeja *dek)

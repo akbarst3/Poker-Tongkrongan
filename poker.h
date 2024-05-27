@@ -57,8 +57,26 @@ typedef struct nodeMeja {
     struct nodeKartu *kartu;
 } nodeMeja;
 
+char type_assign (int jenis);
+void alloc_card (int nomor, int nilai, int jenis, nodeKartu **newNode);
+void fill_the_card(pointKartu *dekLL);
+int count_card(nodeKartu *head);
+nodeKartu* get_node_at(nodeKartu *head, int index);
+void shuffle_deck(pointKartu *dekLL);
+void alloc_player (nodePemain **newNode, char nama[]);
+void create_player (nodePemain **temp, char nama[]);
+void display_node (nodeKartu *head);
+void print_players(nodePemain *head);
+void insert_last(pointKartu *llKartu, nodeKartu *newNode);
 void insert_order(pointKartu *llKartu, nodeKartu *newNode);
-int count_card(nodeKartu *dek);
+void assign_number (nodeKartu *head);
+void fill_deck(nodePemain **aktif, pointKartu *dekLL);
+nodePemain *first_play(nodePemain *aktif);
+void display_card(nodeKartu *card);
+void display_player(nodeKartu *head);
+int get_card_count(nodeKartu *head);
+void print_players2(nodePemain *head);
+
 int cek_aturan(nodeMeja *dek);
 bool is_it_high_card(nodeKartu *head);
 bool is_it_one_pair(nodeKartu *head);
