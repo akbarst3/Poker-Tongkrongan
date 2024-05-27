@@ -9,11 +9,9 @@ program description: Program tugas besar mata kuliah Struktur Data dan Algoritma
 
 #include "poker.h"
 
-char type_assign(int jenis)
-{
+char type_assign (int jenis) {
     char tipe;
-    switch (jenis)
-    {
+    switch (jenis) {
     case 1:
         return tipe = 'A';
     case 2:
@@ -25,10 +23,9 @@ char type_assign(int jenis)
     }
 }
 
-void alloc_card(int nomor, int nilai, int jenis, nodeKartu **newNode)
-{
+void alloc_card (int nomor, int nilai, int jenis, nodeKartu **newNode) { 
     char tipe;
-    *newNode = (nodeKartu *)malloc(sizeof(nodeKartu));
+    *newNode = (nodeKartu *) malloc(sizeof(nodeKartu));
     if (newNode == NULL)
     {
         printf("Memory Sudah Full");
@@ -43,25 +40,18 @@ void alloc_card(int nomor, int nilai, int jenis, nodeKartu **newNode)
     }
 }
 
-// void fill_the_card (nodeKartu **firstDek, nodeKartu **lastDek) {
-void fill_the_card(pointKartu *dekLL)
-{
+void fill_the_card(pointKartu *dekLL) {
     nodeKartu *newNode;
     int nomor = 1;
     int nilai = 3;
     int jenis = 1;
 
-    while (jenis <= 4)
-    {
-        while (nilai <= 15)
-        {
+    while (jenis <= 4) {
+        while (nilai <= 15) {
             alloc_card(nomor, nilai, jenis, &newNode);
-            if (dekLL->head == NULL)
-            {
+            if (dekLL->head == NULL) {
                 dekLL->head = newNode;
-            }
-            else
-            {
+            } else {
                 dekLL->tail->next = newNode;
             }
             dekLL->tail = newNode;
@@ -73,42 +63,33 @@ void fill_the_card(pointKartu *dekLL)
     }
 }
 
-int count_card(nodeKartu *head)
-{
-    nodeKartu *temp = head;
+int count_card(nodeKartu *head) {
     int count = 0;
-    while (temp != NULL)
-    {
+    nodeKartu *temp = head;
+    while (temp != NULL) {
         count++;
         temp = temp->next;
     }
-    count++;
     return count;
 }
 
-nodeKartu *get_node_at(nodeKartu *head, int index)
-{
+nodeKartu* get_node_at(nodeKartu *head, int index) {
     nodeKartu *current = head;
     int count = 0;
-    while (current != NULL && count < index)
-    {
+    while (current != NULL && count < index) {
         current = current->next;
         count++;
     }
     return current;
 }
 
-void shuffle_deck(pointKartu *dekLL)
-{
+void shuffle_deck(pointKartu *dekLL) {
     int count = count_card(dekLL->head);
-    if (count < 2)
-        return;
+    if (count < 2) return;
     srand(time(NULL));
-    for (int i = count - 1; i > 0; i--)
-    {
+    for (int i = count - 1; i > 0; i--) {
         int j = rand() % (i + 1);
-        if (i != j)
-        {
+        if (i != j) {
             // Tukar node ke-i dan node ke-j
             nodeKartu *node_i = get_node_at(dekLL->head, i);
             nodeKartu *node_j = get_node_at(dekLL->head, j);
@@ -123,9 +104,8 @@ void shuffle_deck(pointKartu *dekLL)
     }
 }
 
-void alloc_player(nodePemain **newNode, char nama[])
-{
-    *newNode = (nodePemain *)malloc(sizeof(nodePemain));
+void alloc_player (nodePemain **newNode, char nama[]) { 
+    *newNode = (nodePemain *) malloc(sizeof(nodePemain));
     if (newNode == NULL)
     {
         printf("Memory Sudah Full");
@@ -138,8 +118,7 @@ void alloc_player(nodePemain **newNode, char nama[])
     }
 }
 
-void create_player(nodePemain **temp, char nama[])
-{
+void create_player (nodePemain **temp, char nama[]) {
     char *computer_names[] = {"Com1", "Com2", "Com3"};
     nodePemain *newNode, *ujung;
     ujung = *temp;
@@ -150,8 +129,7 @@ void create_player(nodePemain **temp, char nama[])
     ujung = newNode;
 
     // Untuk Computer
-    for (int i = 0; i < 3; i++)
-    {
+    for (int i = 0; i < 3; i++) {
         alloc_player(&newNode, computer_names[i]);
         (*temp)->pemain = newNode;
         *temp = newNode;
@@ -161,86 +139,68 @@ void create_player(nodePemain **temp, char nama[])
     *temp = ujung;
 }
 
-void display_node(nodeKartu *head)
-{
+void display_node (nodeKartu *head) { 
     nodeKartu *temp = head;
     printf("Linked List = ");
-    while (temp != NULL)
-    {
+    while (temp != NULL) {
         printf("%d | %c | %d -> ", temp->nomorKartu, temp->tipeKartu, temp->nilaiKartu);
         temp = temp->next;
     }
     printf("NULL\n");
 }
 
-void print_players(nodePemain *head)
-{
-    if (head == NULL)
-        return;
+void print_players(nodePemain *head) {
+    if (head == NULL) return;
     nodePemain *current = head;
-    do
-    {
+    do {
         printf("\nPemain : %s\n", current->nama);
         display_node((current)->kartu.head);
         current = current->pemain;
     } while (current != head);
 }
 
-void insert_last(pointKartu *llKartu, nodeKartu *newNode)
-{
-    if (llKartu->tail != NULL)
-    {
+void insert_last(pointKartu *llKartu, nodeKartu *newNode) {
+    if (llKartu->tail != NULL) {
         llKartu->tail->next = newNode;
     }
     llKartu->tail = newNode;
     newNode->next = NULL;
 
-    if (llKartu->head == NULL)
-    {
+    if (llKartu->head == NULL) {
         llKartu->head = newNode;
     }
 }
 
-void insert_order(pointKartu *llKartu, nodeKartu *newNode)
-{
-    if (llKartu->head == NULL)
-    {
+void insert_order(pointKartu *llKartu, nodeKartu *newNode) {
+    if (llKartu->head == NULL) {
         // Linked list kosong
         llKartu->head = newNode;
         llKartu->tail = newNode;
         newNode->next = NULL;
-    }
-    else if (newNode->nilaiKartu <= llKartu->head->nilaiKartu)
-    {
+    } else if (newNode->nilaiKartu <= llKartu->head->nilaiKartu) {
         // Insert di depan
         newNode->next = llKartu->head;
         llKartu->head = newNode;
-    }
-    else
-    {
+    } else {
         // Insert di tengah atau belakang
         nodeKartu *current = llKartu->head;
-        while (current->next != NULL && current->next->nilaiKartu < newNode->nilaiKartu)
-        {
+        while (current->next != NULL && current->next->nilaiKartu < newNode->nilaiKartu) {
             current = current->next;
         }
         newNode->next = current->next;
         current->next = newNode;
 
         // Update tail jika newNode dimasukkan di belakang
-        if (newNode->next == NULL)
-        {
+        if (newNode->next == NULL) {
             llKartu->tail = newNode;
         }
     }
 }
 
-void assign_number(nodeKartu *head)
-{
+void assign_number (nodeKartu *head) { 
     nodeKartu *temp = head;
     int count = 1;
-    while (temp != NULL)
-    {
+    while (temp != NULL) {
         temp->nomorKartu = count;
         count++;
         temp = temp->next;
@@ -382,44 +342,8 @@ void print_game_computers(nodePemain *head) {
     printf("\n");
 }
 
-void print_game_table(pointKartu *deck){
-    nodeKartu *temp = deck->head;
-    do {
-        printf("-------------\t");
-        temp = temp->next;
-    } while (temp != NULL);
-    printf("\n");
-
-    temp = deck->head;
-    do {
-        printf("| Nomor: %2d |\t", temp->nomorKartu);
-        temp = temp->next;
-    } while (temp != NULL);
-    printf("\n");
-
-    temp = deck->head;
-    do {
-        printf("| Tipe: %3c |\t", temp->tipeKartu);
-        temp = temp->next;
-    } while (temp != NULL);
-    printf("\n");
-
-    temp = deck->head;
-    do {
-        printf("| Nilai: %2d |\t", temp->nilaiKartu);
-        temp = temp->next;
-    } while (temp != NULL);
-    printf("\n");
-
-    temp = deck->head;
-    do {
-        printf("-------------\t");
-        temp = temp->next;
-    } while (temp != NULL);
-    printf("\n");
-}
-
 void print_game_player(nodePemain *head){
+    int count, i;
     if (head == NULL) return;
 
     nodePemain *current = head;

@@ -379,6 +379,8 @@ void print_game_player(nodePemain *head){
 }
 
 int main() {
+    // dekLL buat 52 kartu
+    // meja 
     pointKartu dekLL = {NULL, NULL};
     nodePemain *aktif = NULL;
     nodePemain *com = NULL;
