@@ -9,9 +9,11 @@ program description: Program tugas besar mata kuliah Struktur Data dan Algoritma
 
 #include "poker.h"
 
-char type_assign (int jenis) {
+char type_assign(int jenis)
+{
     char tipe;
-    switch (jenis) {
+    switch (jenis)
+    {
     case 1:
         return tipe = 'A';
     case 2:
@@ -23,9 +25,10 @@ char type_assign (int jenis) {
     }
 }
 
-void alloc_card (int nomor, int nilai, int jenis, nodeKartu **newNode) { 
+void alloc_card(int nomor, int nilai, int jenis, nodeKartu **newNode)
+{
     char tipe;
-    *newNode = (nodeKartu *) malloc(sizeof(nodeKartu));
+    *newNode = (nodeKartu *)malloc(sizeof(nodeKartu));
     if (newNode == NULL)
     {
         printf("Memory Sudah Full");
@@ -40,18 +43,24 @@ void alloc_card (int nomor, int nilai, int jenis, nodeKartu **newNode) {
     }
 }
 
-void fill_the_card(pointKartu *dekLL) {
+void fill_the_card(pointKartu *dekLL)
+{
     nodeKartu *newNode;
     int nomor = 1;
     int nilai = 3;
     int jenis = 1;
 
-    while (jenis <= 4) {
-        while (nilai <= 15) {
+    while (jenis <= 4)
+    {
+        while (nilai <= 15)
+        {
             alloc_card(nomor, nilai, jenis, &newNode);
-            if (dekLL->head == NULL) {
+            if (dekLL->head == NULL)
+            {
                 dekLL->head = newNode;
-            } else {
+            }
+            else
+            {
                 dekLL->tail->next = newNode;
             }
             dekLL->tail = newNode;
@@ -63,33 +72,41 @@ void fill_the_card(pointKartu *dekLL) {
     }
 }
 
-int count_card(nodeKartu *head) {
+int count_card(nodeKartu *head)
+{
     int count = 0;
     nodeKartu *temp = head;
-    while (temp != NULL) {
+    while (temp != NULL)
+    {
         count++;
         temp = temp->next;
     }
     return count;
 }
 
-nodeKartu* get_node_at(nodeKartu *head, int index) {
+nodeKartu *get_node_at(nodeKartu *head, int index)
+{
     nodeKartu *current = head;
     int count = 0;
-    while (current != NULL && count < index) {
+    while (current != NULL && count < index)
+    {
         current = current->next;
         count++;
     }
     return current;
 }
 
-void shuffle_deck(pointKartu *dekLL) {
+void shuffle_deck(pointKartu *dekLL)
+{
     int count = count_card(dekLL->head);
-    if (count < 2) return;
+    if (count < 2)
+        return;
     srand(time(NULL));
-    for (int i = count - 1; i > 0; i--) {
+    for (int i = count - 1; i > 0; i--)
+    {
         int j = rand() % (i + 1);
-        if (i != j) {
+        if (i != j)
+        {
             // Tukar node ke-i dan node ke-j
             nodeKartu *node_i = get_node_at(dekLL->head, i);
             nodeKartu *node_j = get_node_at(dekLL->head, j);
@@ -104,8 +121,9 @@ void shuffle_deck(pointKartu *dekLL) {
     }
 }
 
-void alloc_player (nodePemain **newNode, char nama[]) { 
-    *newNode = (nodePemain *) malloc(sizeof(nodePemain));
+void alloc_player(nodePemain **newNode, char nama[])
+{
+    *newNode = (nodePemain *)malloc(sizeof(nodePemain));
     if (newNode == NULL)
     {
         printf("Memory Sudah Full");
@@ -118,7 +136,8 @@ void alloc_player (nodePemain **newNode, char nama[]) {
     }
 }
 
-void create_player (nodePemain **temp, char nama[]) {
+void create_player(nodePemain **temp, char nama[])
+{
     char *computer_names[] = {"Com1", "Com2", "Com3"};
     nodePemain *newNode, *ujung;
     ujung = *temp;
@@ -129,7 +148,8 @@ void create_player (nodePemain **temp, char nama[]) {
     ujung = newNode;
 
     // Untuk Computer
-    for (int i = 0; i < 3; i++) {
+    for (int i = 0; i < 3; i++)
+    {
         alloc_player(&newNode, computer_names[i]);
         (*temp)->pemain = newNode;
         *temp = newNode;
@@ -139,83 +159,86 @@ void create_player (nodePemain **temp, char nama[]) {
     *temp = ujung;
 }
 
-void display_node (nodeKartu *head) { 
+void display_node(nodeKartu *head)
+{
     nodeKartu *temp = head;
     printf("Linked List = ");
-    while (temp != NULL) {
+    while (temp != NULL)
+    {
         printf("%d | %c | %d -> ", temp->nomorKartu, temp->tipeKartu, temp->nilaiKartu);
         temp = temp->next;
     }
     printf("NULL\n");
 }
 
-void print_players(nodePemain *head) {
-    if (head == NULL) return;
+void print_players(nodePemain *head)
+{
+    if (head == NULL)
+        return;
     nodePemain *current = head;
-    do {
+    do
+    {
         printf("\nPemain : %s\n", current->nama);
         display_node((current)->kartu.head);
         current = current->pemain;
     } while (current != head);
 }
 
-void insert_last(pointKartu *llKartu, nodeKartu *newNode) {
-    if (llKartu->tail != NULL) {
-        llKartu->tail->next = newNode;
-    }
-    llKartu->tail = newNode;
-    newNode->next = NULL;
-
-    if (llKartu->head == NULL) {
-        llKartu->head = newNode;
-    }
-}
-
-void insert_order(pointKartu *llKartu, nodeKartu *newNode) {
-    if (llKartu->head == NULL) {
-        // Linked list kosong
+void insert_order(pointKartu *llKartu, nodeKartu *newNode)
+{
+    if (llKartu->head == NULL)
+    {
         llKartu->head = newNode;
         llKartu->tail = newNode;
         newNode->next = NULL;
-    } else if (newNode->nilaiKartu <= llKartu->head->nilaiKartu) {
-        // Insert di depan
+    }
+    else if (newNode->nilaiKartu <= llKartu->head->nilaiKartu)
+    {
         newNode->next = llKartu->head;
         llKartu->head = newNode;
-    } else {
-        // Insert di tengah atau belakang
+    }
+    else
+    {
         nodeKartu *current = llKartu->head;
-        while (current->next != NULL && current->next->nilaiKartu < newNode->nilaiKartu) {
+        while (current->next != NULL && current->next->nilaiKartu < newNode->nilaiKartu)
+        {
             current = current->next;
         }
         newNode->next = current->next;
         current->next = newNode;
 
-        // Update tail jika newNode dimasukkan di belakang
-        if (newNode->next == NULL) {
+        if (newNode->next == NULL)
+        {
             llKartu->tail = newNode;
         }
     }
 }
 
-void assign_number (nodeKartu *head) { 
+void assign_number(nodeKartu *head)
+{
     nodeKartu *temp = head;
     int count = 1;
-    while (temp != NULL) {
+    while (temp != NULL)
+    {
         temp->nomorKartu = count;
         count++;
         temp = temp->next;
     }
 }
 
-void fill_deck(nodePemain **aktif, pointKartu *dekLL) {
+void fill_deck(nodePemain **aktif, pointKartu *dekLL)
+{
     nodeKartu *temp;
     int i, totalCard;
 
-    for (i = 1; i <= 4; i++) {
+    for (i = 1; i <= 4; i++)
+    {
         totalCard = 0;
         printf("Distribusi kartu untuk pemain %d: %s\n", i, (*aktif)->nama);
-        while (totalCard < 13) {
-            if (dekLL->head == NULL) {
+        while (totalCard < 13)
+        {
+            if (dekLL->head == NULL)
+            {
                 printf("Deck kosong!\n");
                 return;
             }
@@ -234,46 +257,60 @@ void fill_deck(nodePemain **aktif, pointKartu *dekLL) {
     }
 }
 
-nodePemain *first_play(nodePemain *aktif) {
+nodePemain *first_play(nodePemain *aktif)
+{
     nodePemain *winner = NULL;
     nodeKartu *temp, *prev;
     int i, totalCard;
 
-    for (i = 1; i <= 4; i++) {
+    for (i = 1; i <= 4; i++)
+    {
         temp = aktif->kartu.head;
         prev = NULL;
-        totalCard = 0; 
-        while (totalCard < 13 && temp != NULL) { 
+        totalCard = 0;
+        while (totalCard < 13 && temp != NULL)
+        {
             // printf("Nilai = %d\n", temp->nilaiKartu);
 
-            if (temp->nilaiKartu == 3) {
+            if (temp->nilaiKartu == 3)
+            {
                 printf("Singa\n");
 
                 // Menetapkan pemenang jika tipeKartu adalah 'D'
-                if (temp->tipeKartu == 'D') {
+                if (temp->tipeKartu == 'D')
+                {
                     winner = aktif;
                 }
 
                 // Menghapus node dari linked list
-                nodeKartu* nodeToFree = temp;
-                if (temp == aktif->kartu.head) {
+                nodeKartu *nodeToFree = temp;
+                if (temp == aktif->kartu.head)
+                {
                     aktif->kartu.head = temp->next;
-                    if (aktif->kartu.head == NULL) {
+                    if (aktif->kartu.head == NULL)
+                    {
                         aktif->kartu.tail = NULL;
                     }
                     temp = temp->next;
-                } else if (temp == aktif->kartu.tail) {
+                }
+                else if (temp == aktif->kartu.tail)
+                {
                     prev->next = NULL;
                     aktif->kartu.tail = prev;
                     temp = NULL;
-                } else {
-                    if (prev != NULL) {
+                }
+                else
+                {
+                    if (prev != NULL)
+                    {
                         prev->next = temp->next;
                     }
                     temp = temp->next;
                 }
                 free(nodeToFree);
-            } else {
+            }
+            else
+            {
                 prev = temp;
                 temp = temp->next;
             }
@@ -284,7 +321,8 @@ nodePemain *first_play(nodePemain *aktif) {
     return winner;
 }
 
-void display_card(nodeKartu *card) {
+void display_card(nodeKartu *card)
+{
     printf("----------\n");
     printf("|%6d |\n", card->nomorKartu);
     printf("|%-8s|\n", card->tipeKartu);
@@ -292,42 +330,57 @@ void display_card(nodeKartu *card) {
     printf("----------\n");
 }
 
-void display_player(nodeKartu *head) {
+void display_player(nodeKartu *head)
+{
     nodeKartu *current = head;
     int count = 0;
-    while (current != NULL && count < 13) {
+    while (current != NULL && count < 13)
+    {
         display_card(current);
         current = current->next;
         count++;
     }
 }
 
+<<<<<<< HEAD
 void print_game_computers(nodePemain *head, char nama[]) {
     if (head == NULL) return;
+=======
+void print_game_computers(nodePemain *head)
+{
+    if (head == NULL)
+        return;
+>>>>>>> f2a2fd1b180752904b33a17e8406198fd3330bc8
 
     nodePemain *current = head;
     current = head;
 
     // Print header
     printf("Komputer:\n");
-    do {
+    do
+    {
         printf("-------------\t");
         current = current->pemain;
     } while (current != head && strncmp(current->nama, nama, strlen(nama)) != 0);
     printf("\n");
 
     current = head;
-    do {
+    do
+    {
         printf("| %-9s |\t", current->nama);
         current = current->pemain;
     } while (current != head && strncmp(current->nama, nama, strlen(nama)) != 0);
     printf("\n");
 
     current = head;
-    do {
-        if (current->kartu.head != NULL) {
+    do
+    {
+        if (current->kartu.head != NULL)
+        {
             printf("| Sisa: %3d |\t", count_card(current->kartu.head));
-        } else {
+        }
+        else
+        {
             printf("| No cards |\t");
         }
         current = current->pemain;
@@ -335,16 +388,23 @@ void print_game_computers(nodePemain *head, char nama[]) {
     printf("\n");
 
     current = head;
-    do {
+    do
+    {
         printf("-------------\t");
         current = current->pemain;
     } while (current != head && strncmp(current->nama, nama, strlen(nama)) != 0);
     printf("\n");
 }
 
+<<<<<<< HEAD
 void print_game_player(nodePemain *head, char nama[]){
+=======
+void print_game_player(nodePemain *head)
+{
+>>>>>>> f2a2fd1b180752904b33a17e8406198fd3330bc8
     int count, i;
-    if (head == NULL) return;
+    if (head == NULL)
+        return;
 
     nodePemain *current = head;
     while (current->pemain != head)
@@ -352,36 +412,45 @@ void print_game_player(nodePemain *head, char nama[]){
         current = current->pemain;
     }
     nodeKartu *temp = current->kartu.head;
+<<<<<<< HEAD
     printf("\n%s:\n", nama);
     do {
+=======
+    do
+    {
+>>>>>>> f2a2fd1b180752904b33a17e8406198fd3330bc8
         printf("-------------\t");
         temp = temp->next;
     } while (temp != NULL);
     printf("\n");
 
     temp = current->kartu.head;
-    do {
+    do
+    {
         printf("| Nomor: %2d |\t", temp->nomorKartu);
         temp = temp->next;
     } while (temp != NULL);
     printf("\n");
 
     temp = current->kartu.head;
-    do {
+    do
+    {
         printf("| Tipe: %3c |\t", temp->tipeKartu);
         temp = temp->next;
     } while (temp != NULL);
     printf("\n");
 
     temp = current->kartu.head;
-    do {
+    do
+    {
         printf("| Nilai: %2d |\t", temp->nilaiKartu);
         temp = temp->next;
     } while (temp != NULL);
     printf("\n");
 
     temp = current->kartu.head;
-    do {
+    do
+    {
         printf("-------------\t");
         temp = temp->next;
     } while (temp != NULL);
@@ -607,7 +676,6 @@ bool is_it_royal_flush(pointKartu *deck, int *highest)
     return false;
 }
 
-
 int compare_Meja(nodeMeja *asli, nodeMeja *sementara)
 {
     int cekBreak = 0;
@@ -649,10 +717,22 @@ int compare_Meja(nodeMeja *asli, nodeMeja *sementara)
     return cekBreak;
 }
 
+void display_ll_comb(pointKartu *llComb)
+{
+    nodeKartu *temp = llComb->head;
+    while (temp != llComb->tail->next)
+    {
+        printf("%d | %c | %d <====> ", temp->nomorKartu, temp->tipeKartu, temp->nilaiKartu);
+        temp = temp->next;
+    }
+    puts("NULL");
+}
+
 bool computer_turn(nodeMeja *dekMeja, nodeMeja *dekTemp, nodePemain *com)
 {
     pointKartu *llComb = (pointKartu *)malloc(sizeof(pointKartu));
     reset_ll_comb(llComb, com);
+    display_node(llComb->head);
     bool result = 1;
 
     if (dekMeja->aturan == 0)
@@ -661,15 +741,24 @@ bool computer_turn(nodeMeja *dekMeja, nodeMeja *dekTemp, nodePemain *com)
             three_cards_comb(llComb, dekMeja, dekTemp) ||
             two_cards_comb(llComb, dekMeja, dekTemp))
         {
+            puts("-----------------TEST1----------------------");
             get_llComb(com, llComb, dekMeja);
+            display_ll_comb(dekMeja->llDeck);
             dekMeja->aturan = dekTemp->aturan;
             dekMeja->nilaiTertinggi = dekTemp->nilaiTertinggi;
+            printf("%d\n", dekMeja->aturan);
         }
         else
         {
-            llComb->head = com->kartu.head;
-            llComb->tail = com->kartu.head;
+            puts("-----------------TEST222----------------------");
+            nodeKartu *tempHead = com->kartu.head;
+            llComb->head = tempHead;
+            llComb->tail = tempHead;
+            tempHead = tempHead->next;
+            com->kartu.head = tempHead;
+            llComb->tail->next = NULL;
             dekMeja->llDeck = llComb;
+            display_node(dekMeja->llDeck->head);
         }
     }
     else
@@ -709,9 +798,9 @@ bool computer_turn(nodeMeja *dekMeja, nodeMeja *dekTemp, nodePemain *com)
 
 void set_tail(pointKartu *llComb, int card)
 {
-    int jumlah = 0;
+    int jumlah = 1;
     nodeKartu *temp = llComb->head;
-    while (jumlah < card && temp != NULL)
+    while (jumlah < card)
     {
         temp = temp->next;
         jumlah++;
@@ -727,6 +816,7 @@ void reset_ll_comb(pointKartu *llComb, nodePemain *com)
 
 bool five_cards_comb(pointKartu *llComb, nodeMeja *dekMeja, nodeMeja *dekTemp)
 {
+    puts("=======TES FIVE=====");
     nodeKartu *temp = llComb->head;
     bool result = false;
 
@@ -743,6 +833,7 @@ bool five_cards_comb(pointKartu *llComb, nodeMeja *dekMeja, nodeMeja *dekTemp)
                     {
                         dekTemp->aturan = 8;
                         result = true;
+                        puts("=======TES STRAIGHTFLUSH=====");
                         break;
                     }
                 }
@@ -750,6 +841,7 @@ bool five_cards_comb(pointKartu *llComb, nodeMeja *dekMeja, nodeMeja *dekTemp)
                 {
                     dekTemp->aturan = 8;
                     result = true;
+                    puts("=======TES STRAIGHTFLUSH=====");
                     break;
                 }
             }
@@ -759,6 +851,7 @@ bool five_cards_comb(pointKartu *llComb, nodeMeja *dekMeja, nodeMeja *dekTemp)
                 {
                     dekTemp->aturan = 9;
                     result = true;
+                    puts("=======TES ROYALFLUSH=====");
                     break;
                 }
             }
@@ -781,6 +874,7 @@ bool five_cards_comb(pointKartu *llComb, nodeMeja *dekMeja, nodeMeja *dekTemp)
                     {
                         dekTemp->aturan = 4;
                         result = true;
+                        puts("=======TES STRAIGHT=====");
                         break;
                     }
                     else if (dekTemp->nilaiTertinggi == dekMeja->nilaiTertinggi)
@@ -789,6 +883,7 @@ bool five_cards_comb(pointKartu *llComb, nodeMeja *dekMeja, nodeMeja *dekTemp)
                         {
                             dekTemp->aturan = 4;
                             result = true;
+                            puts("=======TES STRAIGHT=====");
                             break;
                         }
                     }
@@ -796,6 +891,7 @@ bool five_cards_comb(pointKartu *llComb, nodeMeja *dekMeja, nodeMeja *dekTemp)
                     {
                         dekTemp->aturan = 4;
                         result = true;
+                        puts("=======TES STRAIGHT=====");
                         break;
                     }
                 }
@@ -808,6 +904,7 @@ bool five_cards_comb(pointKartu *llComb, nodeMeja *dekMeja, nodeMeja *dekTemp)
                     {
                         dekTemp->aturan = 5;
                         result = true;
+                        puts("=======TES FLUSH=====");
                         break;
                     }
                     else if (dekTemp->nilaiTertinggi == dekMeja->nilaiTertinggi)
@@ -816,6 +913,7 @@ bool five_cards_comb(pointKartu *llComb, nodeMeja *dekMeja, nodeMeja *dekTemp)
                         {
                             dekTemp->aturan = 5;
                             result = true;
+                            puts("=======TES FLUSH=====");
                             break;
                         }
                     }
@@ -835,6 +933,7 @@ bool five_cards_comb(pointKartu *llComb, nodeMeja *dekMeja, nodeMeja *dekTemp)
                     {
                         dekTemp->aturan = 6;
                         result = true;
+                        puts("=======TES FULLHOUSE=====");
                         break;
                     }
                     else if (dekTemp->nilaiTertinggi == dekMeja->nilaiTertinggi)
@@ -843,6 +942,7 @@ bool five_cards_comb(pointKartu *llComb, nodeMeja *dekMeja, nodeMeja *dekTemp)
                         {
                             dekTemp->aturan = 6;
                             result = true;
+                            puts("=======TES FULLHOUSE=====");
                             break;
                         }
                     }
@@ -850,6 +950,7 @@ bool five_cards_comb(pointKartu *llComb, nodeMeja *dekMeja, nodeMeja *dekTemp)
                     {
                         dekTemp->aturan = 6;
                         result = true;
+                        puts("=======TES FULLHOUSE=====");
                         break;
                     }
                 }
@@ -857,6 +958,10 @@ bool five_cards_comb(pointKartu *llComb, nodeMeja *dekMeja, nodeMeja *dekTemp)
             llComb->head = llComb->head->next;
             llComb->tail = llComb->tail->next;
         }
+    }
+    if (!result)
+    {
+        llComb->head = temp;
     }
     return result;
 }
@@ -879,6 +984,8 @@ bool four_cards_comb(pointKartu *llComb, nodeMeja *dekMeja, nodeMeja *dekTemp)
 
 bool three_cards_comb(pointKartu *llComb, nodeMeja *dekMeja, nodeMeja *dekTemp)
 {
+    puts("=======TES THREE=====");
+    nodeKartu *temp = llComb->head;
     set_tail(llComb, 3);
     while (llComb->tail != NULL)
     {
@@ -887,6 +994,8 @@ bool three_cards_comb(pointKartu *llComb, nodeMeja *dekMeja, nodeMeja *dekTemp)
             if (dekMeja->aturan == 0)
             {
                 dekTemp->aturan = 3;
+                puts("=======TES TRIS=====");
+
                 return true;
             }
             else if (dekTemp->nilaiTertinggi == dekMeja->nilaiTertinggi)
@@ -894,6 +1003,7 @@ bool three_cards_comb(pointKartu *llComb, nodeMeja *dekMeja, nodeMeja *dekTemp)
                 if (dekTemp->llDeck->tail->tipeKartu > dekMeja->llDeck->tail->tipeKartu)
                 {
                     dekTemp->aturan = 3;
+                    puts("=======TES TRIS=====");
                     return true;
                 }
             }
@@ -901,12 +1011,15 @@ bool three_cards_comb(pointKartu *llComb, nodeMeja *dekMeja, nodeMeja *dekTemp)
         llComb->head = llComb->head->next;
         llComb->tail = llComb->tail->next;
     }
+    llComb->head = temp;
     return false;
 }
 
 bool two_cards_comb(pointKartu *llComb, nodeMeja *dekMeja, nodeMeja *dekTemp)
 {
+    nodeKartu *temp = llComb->head;
     set_tail(llComb, 2);
+    puts("=======TES TWO=====");
     while (llComb->tail != NULL)
     {
         if (is_it_pair(llComb, &(dekTemp->nilaiTertinggi)))
@@ -914,6 +1027,7 @@ bool two_cards_comb(pointKartu *llComb, nodeMeja *dekMeja, nodeMeja *dekTemp)
             if (dekMeja->aturan == 0)
             {
                 dekTemp->aturan = 2;
+                puts("-------PAIR NIH BOS----");
                 return true;
             }
             else if (dekTemp->nilaiTertinggi == dekMeja->nilaiTertinggi)
@@ -921,6 +1035,7 @@ bool two_cards_comb(pointKartu *llComb, nodeMeja *dekMeja, nodeMeja *dekTemp)
                 if (dekTemp->llDeck->tail->tipeKartu > dekMeja->llDeck->tail->tipeKartu)
                 {
                     dekTemp->aturan = 2;
+                    puts("-------PAIR NIH BOS----");
                     return true;
                 }
             }
@@ -928,6 +1043,7 @@ bool two_cards_comb(pointKartu *llComb, nodeMeja *dekMeja, nodeMeja *dekTemp)
         llComb->head = llComb->head->next;
         llComb->tail = llComb->tail->next;
     }
+    llComb->head = temp;
     return false;
 }
 
@@ -958,18 +1074,48 @@ bool high_card_fight(pointKartu *llComb, nodeMeja *dekMeja, nodeMeja *dekTemp)
     return false;
 }
 
-void get_llComb(nodePemain *com, pointKartu *llComb, nodeMeja *dekMeja)
+void freeMemory(nodeMeja *dekMeja)
 {
-    nodeKartu *temp = com->kartu.head;
-    while (temp->next != llComb->head)
+    if (dekMeja && dekMeja->llDeck)
     {
-        temp = temp->next;
+        nodeKartu *temp = dekMeja->llDeck->head;
+        nodeKartu *next;
+
+        while (temp)
+        {
+            next = temp->next;
+            free(temp);
+            temp = next;
+        }
+        free(dekMeja->llDeck);
     }
-    temp->next = llComb->tail->next;
-    dekMeja->llDeck->head = llComb->head;
-    dekMeja->llDeck->tail = llComb->tail;
 }
 
+void get_llComb(nodePemain *com, pointKartu *llComb, nodeMeja *dekMeja)
+{
+    freeMemory(dekMeja);
+    nodeKartu *temp = com->kartu.head;
+    if (com->kartu.head == llComb->head)
+    {
+        while (temp != llComb->tail->next)
+        {
+            temp = temp->next;
+        }
+        com->kartu.head = temp;
+    }
+    else
+    {
+        while (temp->next != llComb->head)
+        {
+            temp = temp->next;
+        }
+        temp->next = llComb->tail->next;
+    }
+    dekMeja->llDeck = llComb;
+    dekMeja->llDeck->tail->next = NULL;
+}
+
+<<<<<<< HEAD
 int main() {
     int cekBreak, choice;
     char playerName[10];
@@ -1051,3 +1197,92 @@ int main() {
     // printf("Ini Main = %s \n", aktif->nama);
     // print_players2(aktif);
 }
+=======
+bool player_turn(nodePemain *player, nodeMeja *dekTemp)
+{
+    char choice;
+    bool validInput = false;
+    do
+    {
+        int card;
+        printf("Lawan kartu di meja? (y/n): ");
+        scanf(" %c", &choice);
+        switch (choice)
+        {
+        case 'y':
+            do
+            {
+                system("cls");
+                validInput = true;
+                printf("pilih nomor kartu : ");
+                scanf("%d", &card);
+                get_player_card(&(player)->kartu, dekTemp, card);
+                system("cls");
+                printf("Taruh kartu? (y/n): ");
+                scanf(" %c", &choice);
+            } while (choice != 'y');
+
+            break;
+
+        case 'n':
+            return false;
+
+        default:
+            puts("input salah");
+            break;
+        }
+    } while (!validInput);
+}
+
+void get_player_card(pointKartu *llPlayer, nodeMeja *dekTemp, int card)
+{
+    nodeKartu *selected = llPlayer->head;
+    while (selected->nomorKartu != card)
+    {
+        selected = selected->next;
+    }
+    if (selected == llPlayer->head)
+    {
+        llPlayer->head = selected->next;
+    }
+    else
+    {
+        nodeKartu *prev = llPlayer->head;
+        while (prev->next != selected)
+        {
+            prev = prev->next;
+        }
+        prev->next = selected->next;
+    }
+    insert_order(dekTemp->llDeck, selected);
+    
+}
+// int main()
+// {
+//     // dekLL buat 52 kartu
+//     // meja
+//     pointKartu dekLL = {NULL, NULL};
+//     nodePemain *aktif = NULL;
+//     nodePemain *com = NULL;
+//     int coba;
+
+//     fill_the_card(&dekLL);
+
+//     shuffle_deck(&dekLL);
+
+//     create_player(&aktif, "Dzaki");
+//     com = aktif->pemain;
+//     // print_players(aktif);
+//     fill_deck(&aktif, &dekLL);
+//     aktif = first_play(aktif);
+//     printf("Ini Main = %s \n", aktif->nama);
+//     // print_game_table();
+
+//     printf("%s\n", aktif->nama);
+//     nodeMeja *dekMeja = (nodeMeja *)malloc(sizeof(nodeMeja));
+//     dekMeja->llDeck = NULL;
+//     dekMeja->aturan = 0;
+//     nodeMeja *dekTemp = (nodeMeja *)malloc(sizeof(nodeMeja));
+//     bool lawan = computer_turn(dekMeja, dekTemp, aktif);
+// }
+>>>>>>> f2a2fd1b180752904b33a17e8406198fd3330bc8
