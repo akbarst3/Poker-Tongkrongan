@@ -65,7 +65,6 @@ void alloc_player (nodePemain **newNode, char nama[]);
 void create_player (nodePemain **temp, char nama[]);
 void display_node (nodeKartu *head);
 void print_players(nodePemain *head);
-void insert_last(pointKartu *llKartu, nodeKartu *newNode);
 void insert_order(pointKartu *llKartu, nodeKartu *newNode);
 void assign_number (nodeKartu *head);
 void fill_deck(nodePemain **aktif, pointKartu *dekLL);
@@ -96,7 +95,10 @@ bool four_cards_comb(pointKartu *llComb, nodeMeja *dekMeja, nodeMeja *dekTemp);
 bool three_cards_comb(pointKartu *llComb, nodeMeja *dekMeja, nodeMeja *dekTemp);
 bool two_cards_comb(pointKartu *llComb, nodeMeja *dekMeja, nodeMeja *dekTemp);
 bool high_card_fight(pointKartu *llComb, nodeMeja *dekMeja, nodeMeja *dekTemp);
+void freeMemory(nodeMeja *dekMeja);
 void get_llComb(nodePemain *com, pointKartu *llComb, nodeMeja *dekMeja);
+void get_player_card(pointKartu *llPlayer, nodeMeja *dekTemp, int card);
+
 
 
 // Pemain akan dibuat dalam bentuk circular singly linked list
