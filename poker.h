@@ -46,7 +46,7 @@ typedef struct pointKartu {
 typedef struct nodePemain {
     char nama[100];
     struct pointKartu kartu;
-    struct nodePemain *pemain;
+    struct nodePemain *next;
 } nodePemain;
 
 typedef struct nodeMeja {
@@ -72,7 +72,7 @@ nodePemain *first_play(nodePemain *aktif);
 void display_card(nodeKartu *card);
 void display_player(nodeKartu *head);
 void print_game_computers(nodePemain *head, char nama[]);
-void print_game_player(nodePemain *head, char nama[]);
+void print_game_player(pointKartu *kartu);
 void print_game_table(pointKartu *deck);
 
 int cek_aturan(nodeMeja *dek, int *highest);
@@ -95,11 +95,13 @@ bool four_cards_comb(pointKartu *llComb, nodeMeja *dekMeja, nodeMeja *dekTemp);
 bool three_cards_comb(pointKartu *llComb, nodeMeja *dekMeja, nodeMeja *dekTemp);
 bool two_cards_comb(pointKartu *llComb, nodeMeja *dekMeja, nodeMeja *dekTemp);
 bool high_card_fight(pointKartu *llComb, nodeMeja *dekMeja, nodeMeja *dekTemp);
-void freeMemory(nodeMeja *dekMeja);
-void get_llComb(nodePemain *com, pointKartu *llComb, nodeMeja *dekMeja);
-bool player_turn(nodePemain * player, nodeMeja *dekTemp);
+void free_memory_deck(nodeMeja *dekMeja);
+void get_ll_comb(nodePemain *com, pointKartu *llComb, nodeMeja *dekMeja);
+bool player_turn(nodePemain *player, nodeMeja *dekTemp);
 void get_player_card(pointKartu *llPlayer, nodeMeja *dekTemp, int card);
-
+void alloc_deck(nodeMeja **dekMeja);
+void return_card(pointKartu *llTemp, pointKartu *llPlayer);
+void print_rule_table(nodeMeja *dekMeja);
 
 
 // Pemain akan dibuat dalam bentuk circular singly linked list
