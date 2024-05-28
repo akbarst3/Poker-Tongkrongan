@@ -342,15 +342,10 @@ void display_player(nodeKartu *head)
     }
 }
 
-<<<<<<< HEAD
-void print_game_computers(nodePemain *head, char nama[]) {
-    if (head == NULL) return;
-=======
-void print_game_computers(nodePemain *head)
+void print_game_computers(nodePemain *head, char nama[])
 {
     if (head == NULL)
         return;
->>>>>>> f2a2fd1b180752904b33a17e8406198fd3330bc8
 
     nodePemain *current = head;
     current = head;
@@ -396,12 +391,8 @@ void print_game_computers(nodePemain *head)
     printf("\n");
 }
 
-<<<<<<< HEAD
-void print_game_player(nodePemain *head, char nama[]){
-=======
-void print_game_player(nodePemain *head)
+void print_game_player(nodePemain *head, char nama[])
 {
->>>>>>> f2a2fd1b180752904b33a17e8406198fd3330bc8
     int count, i;
     if (head == NULL)
         return;
@@ -412,13 +403,9 @@ void print_game_player(nodePemain *head)
         current = current->pemain;
     }
     nodeKartu *temp = current->kartu.head;
-<<<<<<< HEAD
     printf("\n%s:\n", nama);
-    do {
-=======
     do
     {
->>>>>>> f2a2fd1b180752904b33a17e8406198fd3330bc8
         printf("-------------\t");
         temp = temp->next;
     } while (temp != NULL);
@@ -457,37 +444,43 @@ void print_game_player(nodePemain *head)
     printf("\n");
 }
 
-void print_game_table(pointKartu *deck){
+void print_game_table(pointKartu *deck)
+{
     nodeKartu *temp = deck->head;
-    do {
+    do
+    {
         printf("-------------\t");
         temp = temp->next;
     } while (temp != NULL);
     printf("\n");
 
     temp = deck->head;
-    do {
+    do
+    {
         printf("| Nomor: %2d |\t", temp->nomorKartu);
         temp = temp->next;
     } while (temp != NULL);
     printf("\n");
 
     temp = deck->head;
-    do {
+    do
+    {
         printf("| Tipe: %3c |\t", temp->tipeKartu);
         temp = temp->next;
     } while (temp != NULL);
     printf("\n");
 
     temp = deck->head;
-    do {
+    do
+    {
         printf("| Nilai: %2d |\t", temp->nilaiKartu);
         temp = temp->next;
     } while (temp != NULL);
     printf("\n");
 
     temp = deck->head;
-    do {
+    do
+    {
         printf("-------------\t");
         temp = temp->next;
     } while (temp != NULL);
@@ -1115,90 +1108,7 @@ void get_llComb(nodePemain *com, pointKartu *llComb, nodeMeja *dekMeja)
     dekMeja->llDeck->tail->next = NULL;
 }
 
-<<<<<<< HEAD
-int main() {
-    int cekBreak, choice;
-    char playerName[10];
-    pointKartu dekLL = {NULL, NULL};
-    nodePemain *aktif = NULL;
-    nodePemain *com = NULL;
-    pointKartu *dekAktif = NULL;
-    do
-    {
-        printf ("\n\n\n\t\t\tSELAMAT DATANG DI POKER TONGKRONGAN \n");
-        printf ("MENU :\n\n");
-        printf ("1. Start\n\n2. Help Menu\n\n3. History\n\n4. Exit\n\n\nPilih Menu: ");
-        scanf("%d", &choice);
-        switch (choice)
-        {
-        case 1:
-            /* start */
-            system("cls");
-            printf("\t\t\tMasukkan Nama Pemain (MAX 9 Huruf): "); //nama player
-            scanf("%s", &playerName);
-            system("cls");
-            fill_the_card(&dekLL);
-            shuffle_deck(&dekLL);
-            create_player(&aktif, playerName);
-            com = aktif->pemain;
-            fill_deck(&aktif, &dekLL);
-            aktif = first_play(aktif);
-            do
-            {
-                print_game_computers(com, playerName);
-                print_game_table(dekAktif);
-                print_game_player(aktif, playerName);
-                if (aktif->pemain->nama != playerName)
-                {
-                    /* com turn */
-                }
-                if (aktif->pemain->nama == playerName)
-                {
-                    /* player turn */
-                    /* player give card */
-                    /* cekBreak = func compare meja */
-                    if (cekBreak == 2)
-                    {
-                        puts("END");
-                    }
-                    
-                }
-                
-            } while (aktif->kartu.head != NULL);
-            
-            break;
-        case 2:
-            // help
-            break;
-        case 3:
-            //history
-            break;
-        default:
-            break;
-        }
-    } while (choice != 4);
-
-    // pointKartu dekLL = {NULL, NULL};
-    // nodePemain *aktif = NULL;
-
-    // fill_the_card(&dekLL);
-    // printf("Deck sebelum diacak:\n");
-    // display_node(dekLL.head);
-
-    // shuffle_deck(&dekLL);
-    // printf("Deck setelah diacak:\n");
-    // display_node(dekLL.head);
-
-    // create_player(&aktif, "Dzaki");
-    // // print_players(aktif);
-    // fill_deck(&aktif, &dekLL);
-    // printf("Makan\n");
-    // aktif = first_play(aktif);
-    // printf("Ini Main = %s \n", aktif->nama);
-    // print_players2(aktif);
-}
-=======
-bool player_turn(nodePemain *player, nodeMeja *dekTemp)
+bool player_turn(nodePemain * player, nodeMeja *dekTemp)
 {
     char choice;
     bool validInput = false;
@@ -1255,34 +1165,4 @@ void get_player_card(pointKartu *llPlayer, nodeMeja *dekTemp, int card)
         prev->next = selected->next;
     }
     insert_order(dekTemp->llDeck, selected);
-    
 }
-// int main()
-// {
-//     // dekLL buat 52 kartu
-//     // meja
-//     pointKartu dekLL = {NULL, NULL};
-//     nodePemain *aktif = NULL;
-//     nodePemain *com = NULL;
-//     int coba;
-
-//     fill_the_card(&dekLL);
-
-//     shuffle_deck(&dekLL);
-
-//     create_player(&aktif, "Dzaki");
-//     com = aktif->pemain;
-//     // print_players(aktif);
-//     fill_deck(&aktif, &dekLL);
-//     aktif = first_play(aktif);
-//     printf("Ini Main = %s \n", aktif->nama);
-//     // print_game_table();
-
-//     printf("%s\n", aktif->nama);
-//     nodeMeja *dekMeja = (nodeMeja *)malloc(sizeof(nodeMeja));
-//     dekMeja->llDeck = NULL;
-//     dekMeja->aturan = 0;
-//     nodeMeja *dekTemp = (nodeMeja *)malloc(sizeof(nodeMeja));
-//     bool lawan = computer_turn(dekMeja, dekTemp, aktif);
-// }
->>>>>>> f2a2fd1b180752904b33a17e8406198fd3330bc8
