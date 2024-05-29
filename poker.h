@@ -18,7 +18,7 @@ program description: Program tugas besar mata kuliah Struktur Data dan Algoritma
 #define Queen 12
 #define King 13
 #define As 14
-#define Two 15
+#define Poker 15
 
 #define highCard 1
 #define pair 2
@@ -95,7 +95,7 @@ bool four_cards_comb(pointKartu *llComb, nodeMeja *dekMeja, nodeMeja *dekTemp);
 bool three_cards_comb(pointKartu *llComb, nodeMeja *dekMeja, nodeMeja *dekTemp);
 bool two_cards_comb(pointKartu *llComb, nodeMeja *dekMeja, nodeMeja *dekTemp);
 bool high_card_fight(pointKartu *llComb, nodeMeja *dekMeja, nodeMeja *dekTemp);
-void free_memory_deck(nodeMeja *dekMeja);
+void free_memory_deck(nodeMeja *deck);
 void get_ll_comb(nodePemain *com, pointKartu *llComb, nodeMeja *dekMeja);
 bool player_turn(nodePemain *player, nodeMeja *dekTemp);
 void get_player_card(pointKartu *llPlayer, nodeMeja *dekTemp, int card);

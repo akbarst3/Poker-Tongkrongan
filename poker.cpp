@@ -186,11 +186,13 @@ void print_players(nodePemain *head)
 
 void insert_order(pointKartu *llKartu, nodeKartu *newNode)
 {
+    // puts("TESSSS ORDER 1");
     if (llKartu->head == NULL)
     {
         llKartu->head = newNode;
         llKartu->tail = newNode;
         newNode->next = NULL;
+        // puts("TESSSS ORDER 1");
     }
     else if (newNode->nilaiKartu <= llKartu->head->nilaiKartu)
     {
@@ -212,6 +214,7 @@ void insert_order(pointKartu *llKartu, nodeKartu *newNode)
             llKartu->tail = newNode;
         }
     }
+    // puts("TESSSS ORDER 1");
 }
 
 void assign_number(nodeKartu *head)
@@ -677,7 +680,7 @@ int compare_Meja(nodeMeja *asli, nodeMeja *sementara)
         return cekBreak;
     }
 
-    if (asli->nilaiTertinggi == Two && sementara->aturan == fourOfaKind && asli->aturan == highCard) // pengecekan bom
+    if (asli->nilaiTertinggi == Poker && sementara->aturan == fourOfaKind && asli->aturan == highCard) // pengecekan bom
     {
         asli->aturan = sementara->aturan;
         asli->nilaiTertinggi = sementara->nilaiTertinggi;
@@ -707,29 +710,40 @@ bool computer_turn(nodeMeja *dekMeja, nodeMeja *dekTemp, nodePemain *com)
 {
     pointKartu *llComb = (pointKartu *)malloc(sizeof(pointKartu));
     reset_ll_comb(llComb, com);
-    // display_node(llComb->head);
-    bool result = 1;
-
+    bool result = false;
+    printf("\nATURAN MEJA %d\n", dekMeja->aturan);
     if (dekMeja->aturan == 0)
     {
         if (five_cards_comb(llComb, dekMeja, dekTemp) ||
             three_cards_comb(llComb, dekMeja, dekTemp) ||
             two_cards_comb(llComb, dekMeja, dekTemp))
         {
+            puts("TESSS PAKET");
             get_ll_comb(com, llComb, dekMeja);
             dekMeja->aturan = dekTemp->aturan;
             dekMeja->nilaiTertinggi = dekTemp->nilaiTertinggi;
+            puts("TESSS PAKET");
         }
         else
         {
+            puts("TESSS SATU");
             nodeKartu *tempHead = com->kartu.head;
+            if (tempHead == NULL)
+            {
+                fprintf(stderr, "Kartu Pemain Habis\n");
+                free(llComb);
+                return false;
+            }
+
             llComb->head = tempHead;
             llComb->tail = tempHead;
             tempHead = tempHead->next;
             com->kartu.head = tempHead;
             llComb->tail->next = NULL;
             dekMeja->llDeck = llComb;
+            puts("TESSS PAKET");
         }
+        result = true;
     }
     else
     {
@@ -737,7 +751,14 @@ bool computer_turn(nodeMeja *dekMeja, nodeMeja *dekTemp, nodePemain *com)
         {
         case highCard:
             puts("-----------------1");
-            result = high_card_fight(llComb, dekMeja, dekTemp);
+            if (dekMeja->nilaiTertinggi == Poker)
+            {
+                result = four_cards_comb(llComb, dekMeja, dekTemp);
+                if (!result)
+                {
+                    result = high_card_fight(llComb, dekMeja, dekTemp);
+                }
+            }
             puts("-----------------1");
             break;
         case pair:
@@ -752,7 +773,14 @@ bool computer_turn(nodeMeja *dekMeja, nodeMeja *dekTemp, nodePemain *com)
             break;
         default:
             puts("-----------------5");
-            result = five_cards_comb(llComb, dekMeja, dekTemp);
+            if (four_cards_comb(llComb, dekMeja, dekTemp))
+            {
+                result = true;
+            }
+            else
+            {
+                result = five_cards_comb(llComb, dekMeja, dekTemp);
+            }
             puts("-----------------5");
             break;
         }
@@ -761,16 +789,12 @@ bool computer_turn(nodeMeja *dekMeja, nodeMeja *dekTemp, nodePemain *com)
         {
             puts("---------------TRUE");
             get_ll_comb(com, llComb, dekMeja);
+            free(dekMeja->llDeck);
             puts("---------------TRUE");
             dekMeja->aturan = dekTemp->aturan;
             dekMeja->nilaiTertinggi = dekTemp->nilaiTertinggi;
         }
-        else
-        {
-            dekTemp->llDeck = NULL;
-        }
     }
-    free(llComb);
     return result;
 }
 
@@ -1043,11 +1067,11 @@ bool high_card_fight(pointKartu *llComb, nodeMeja *dekMeja, nodeMeja *dekTemp)
     return false;
 }
 
-void free_memory_deck(nodeMeja *dekMeja)
+void free_memory_deck(nodeMeja *deck)
 {
-    if (dekMeja && dekMeja->llDeck)
+    if (deck->llDeck != NULL)
     {
-        nodeKartu *temp = dekMeja->llDeck->head;
+        nodeKartu *temp = deck->llDeck->head;
         nodeKartu *next;
 
         while (temp)
@@ -1056,33 +1080,50 @@ void free_memory_deck(nodeMeja *dekMeja)
             free(temp);
             temp = next;
         }
-        free(dekMeja->llDeck);
+        free(deck->llDeck);
     }
+    deck->aturan = 0;
+    deck->nilaiTertinggi = 0;
+    deck->llDeck = NULL;
 }
 
 void get_ll_comb(nodePemain *com, pointKartu *llComb, nodeMeja *dekMeja)
 {
-    free_memory_deck(dekMeja);
-    puts("==========");
-    nodeKartu *temp = com->kartu.head;
-    if (com->kartu.head == llComb->head)
+    if (dekMeja->llDeck != NULL)
     {
-        while (temp != llComb->tail->next)
+        puts("CEKKKKKK");
+        free_memory_deck(dekMeja);
+        puts("CEKKKKKK");
+    }
+    dekMeja->llDeck = llComb;
+    nodeKartu *temp = com->kartu.head;
+    if (temp == llComb->head)
+    {
+        if (llComb->tail != NULL)
         {
-            temp = temp->next;
+            com->kartu.head = llComb->tail->next;
         }
-        com->kartu.head = temp;
+        else
+        {
+            com->kartu.head = NULL;
+        }
     }
     else
     {
-        while (temp->next != llComb->head)
+        while (temp != NULL && temp->next != llComb->head)
         {
             temp = temp->next;
         }
-        temp->next = llComb->tail->next;
+        if (temp != NULL)
+        {
+            temp->next = llComb->tail->next;
+        }
     }
-    dekMeja->llDeck = llComb;
-    dekMeja->llDeck->tail->next = NULL;
+
+    if (dekMeja->llDeck->tail != NULL)
+    {
+        dekMeja->llDeck->tail->next = NULL;
+    }
 }
 
 bool player_turn(nodePemain *player, nodeMeja *dekTemp)
@@ -1094,38 +1135,54 @@ bool player_turn(nodePemain *player, nodeMeja *dekTemp)
         int card;
         printf("Lawan kartu di meja? (y/n): ");
         scanf(" %c", &choice);
-        switch (choice)
+        do
         {
-        case 'y':
-            do
+            switch (choice)
             {
+            case 'y':
                 validInput = true;
                 printf("pilih nomor kartu : ");
                 scanf("%d", &card);
                 get_player_card(&(player)->kartu, dekTemp, card);
-                system("cls");
-                printf("Taruh kartu? (y/n): ");
-                scanf(" %c", &choice);
-            } while (choice != 'y');
+                if (dekTemp->llDeck == NULL)
+                {
+                    printf("KARTU DENGAN NOMOR %D TIDAK DITEMUKAN! PILIH KARTU LAIN\n\n", card);
+                }
+                else
+                {
+                    printf("Taruh kartu? (y/n): ");
+                    scanf(" %c", &choice);
+                }
+                break;
 
-            break;
+            case 'n':
+                return false;
+                break;
 
-        case 'n':
-            return false;
-
-        default:
-            puts("input salah");
-            break;
-        }
+            default:
+                puts("input salah");
+                break;
+            }
+        } while (choice != 'n');
     } while (!validInput);
 }
 
 void get_player_card(pointKartu *llPlayer, nodeMeja *dekTemp, int card)
 {
+    if (dekTemp->llDeck != NULL)
+    {
+        free_memory_deck(dekTemp);
+        dekTemp->llDeck->head = NULL;
+        dekTemp->llDeck->tail = NULL;
+    }
     nodeKartu *selected = llPlayer->head;
     while (selected->nomorKartu != card)
     {
         selected = selected->next;
+    }
+    if (selected == NULL)
+    {
+        return;
     }
     if (selected == llPlayer->head)
     {
@@ -1140,7 +1197,9 @@ void get_player_card(pointKartu *llPlayer, nodeMeja *dekTemp, int card)
         }
         prev->next = selected->next;
     }
+    printf("%d\n", dekTemp->llDeck->head->nilaiKartu);
     insert_order(dekTemp->llDeck, selected);
+    puts("TESSSSS PLAYER CARD 1");
 }
 
 void alloc_deck(nodeMeja **deck)
@@ -1154,14 +1213,6 @@ void alloc_deck(nodeMeja **deck)
 int main()
 {
     int cekBreak, choice, round;
-    char playerName[10];
-    pointKartu dekLL = {NULL, NULL};
-    nodePemain *aktif = NULL;
-    nodePemain *com = NULL;
-    pointKartu *dekAktif = NULL;
-    nodePemain *player = NULL;
-    nodeMeja *dekMeja = NULL;
-    nodeMeja *dekTemp = NULL;
     do
     {
         printf("\n\n\n\t\t\tSELAMAT DATANG DI POKER TONGKRONGAN \n");
@@ -1172,7 +1223,14 @@ int main()
         switch (choice)
         {
         case 1:
-
+            char playerName[10];
+            pointKartu dekLL = {NULL, NULL};
+            nodePemain *aktif = NULL;
+            nodePemain *com = NULL;
+            pointKartu *dekAktif = NULL;
+            nodePemain *player = NULL;
+            nodeMeja *dekMeja = NULL;
+            nodeMeja *dekTemp = NULL;
             /* start */
             system("cls");
             printf("\t\t\tMasukkan Nama Pemain (MAX 9 Huruf): "); // nama player
@@ -1188,18 +1246,17 @@ int main()
             alloc_deck(&dekMeja);
             alloc_deck(&dekTemp);
             nodePemain *winner = aktif;
-            nodePemain *temp = aktif;
             printf("PERTAMA MAIN : %s\n\n", aktif->nama);
-
+            bool fight = false;
             do
             {
-                bool fight = false;
                 print_game_computers(com, playerName);
                 puts("\n\nDEK MEJA :");
                 if (dekMeja->llDeck != NULL)
                 {
                     print_game_player(dekMeja->llDeck);
                     print_rule_table(dekMeja);
+                    printf("%s\n", winner->nama);
                     puts("\n");
                 }
                 else
@@ -1219,7 +1276,6 @@ int main()
                     else
                     {
                         printf("\n%s skip\n", aktif->nama);
-                        continue;
                     }
                 }
                 else
@@ -1262,7 +1318,14 @@ int main()
                     }
                 }
                 aktif = aktif->next;
-            } while ((player->kartu.head && player->next));
+                if (aktif == winner)
+                {
+                    puts("TESSS MENANG RONDE");
+                    free_memory_deck(dekMeja);
+                }
+
+                system("cls");
+            } while ((player->kartu.head && player->next != NULL));
             break;
 
             // case 2:
