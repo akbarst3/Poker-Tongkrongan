@@ -17,7 +17,7 @@ program description: Program tugas besar mata kuliah Struktur Data dan Algoritma
 #define Jack 11
 #define Queen 12
 #define King 13
-#define As 14
+#define Ace 14
 #define Poker 15
 
 #define highCard 1
