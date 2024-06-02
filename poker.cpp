@@ -1654,3 +1654,34 @@ void print_win(int pos)
         break;
     }
 }
+
+void write_history(char *filename, int round, int pos, char *playerName) 
+{
+    FILE *file = fopen(filename, "a");
+    if (file == NULL) {
+        printf("History Tidak Ditemukan.\n");
+        return;
+    }
+    fprintf(file, "Player: %s\nRonde: %d\nPosisi: %d\n\n", playerName, round, pos);
+    fclose(file);
+}
+
+void view_history()
+{
+    system("cls");
+    FILE *file = fopen("history.txt", "r");
+
+    if (file == NULL) {
+        printf("History Tidak Ditemukan.\n");
+    } else {
+        char line[256];
+        while (fgets(line, sizeof(line), file) != NULL) {
+            printf("%s", line);  
+        }
+        fclose(file);
+    }
+    puts("");
+    puts("");
+    system("pause");
+    system("cls");
+}
