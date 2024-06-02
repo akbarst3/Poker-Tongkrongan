@@ -495,24 +495,28 @@ int cek_aturan(nodeMeja *dek, int *highest, int card)
             puts("1");
             return highCard;
         }
+        break;
     case 2:
         if (is_it_pair(dek->llDeck, highest))
         {
             puts("2");
             return pair;
         }
+        break;
     case 3:
         if (is_it_three_of_a_kind(dek->llDeck, highest))
         {
             puts("3");
             return threeOfaKind;
         }
+        break;
     case 4:
         if (is_it_four_of_a_kind(dek->llDeck, highest))
         {
             puts("7");
             return fourOfaKind;
         }
+        break;
     case 5:
         if (is_it_straight(dek->llDeck, highest))
         {
@@ -539,9 +543,12 @@ int cek_aturan(nodeMeja *dek, int *highest, int card)
             puts("9");
             return royalFlush;
         }
+        break;
     default:
         return 0;
+        break;
     }
+    return 0;
 }
 
 bool is_it_high_card(pointKartu *deck, int *highest)
@@ -660,24 +667,19 @@ bool is_it_four_of_a_kind(pointKartu *deck, int *highest)
 
 bool is_it_straight_flush(pointKartu *deck, int *highest)
 {
-    puts("STRAIGHT FLUSH");
     nodeKartu *head = deck->head;
     if (is_it_flush(deck, highest) && is_it_straight(deck, highest))
     {
-        puts("STRAIGHT FLUSH");
         *highest = deck->tail->nilaiKartu;
         return true;
     }
-    puts("STRAIGHT FLUSH");
     return false;
 }
 
 bool is_it_royal_flush(pointKartu *deck, int *highest)
 {
-    puts("ROYAL FLUSH");
     if (is_it_flush(deck, highest) && is_it_straight(deck, highest))
     {
-        puts("ROYAL FLUSH");
         if (deck->tail->nilaiKartu == Ace)
         {
             *highest = deck->tail->nilaiKartu;
@@ -687,7 +689,6 @@ bool is_it_royal_flush(pointKartu *deck, int *highest)
         {
             return false;
         }
-        puts("ROYAL FLUSH");
     }
     return false;
 }
@@ -1317,7 +1318,7 @@ void alloc_deck(nodeMeja **deck)
 
 int main()
 {
-    int cekBreak, choice, round = 0, pos = 4;
+    int cekBreak, choice, round = 0;
     do
     {
         printf("\n\n\n\t\t\tSELAMAT DATANG DI POKER TONGKRONGAN \n");
@@ -1329,6 +1330,7 @@ int main()
         {
         case 1:
             char playerName[10];
+            int pos = 5;
             pointKartu dekLL = {NULL, NULL};
             nodePemain *aktif = NULL;
             nodePemain *com = NULL;
@@ -1458,13 +1460,14 @@ int main()
                                 winner = player;
                                 if (player->kartu.head == NULL && player->kartu.tail == NULL)
                                 {
-                                    puts("TES MENANG");
                                     nodePemain *countPos = player;
-                                    while (countPos->next != player)
+                                    do
                                     {
+                                        puts("TES MENANG");
                                         pos--;
+                                        printf("POS %d\n", pos);
                                         countPos = countPos->next;
-                                    }
+                                    } while (countPos != player);
                                 }
                                 break;
                             case 2:
@@ -1492,7 +1495,7 @@ int main()
                 }
                 if (dekMeja->aturan == 7)
                 {
-                    printf("PERMAINAN BERAKHIR, %s MENANG\n", winner->nama);
+                    printf("BOM! PERMAINAN BERAKHIR, %s MENANG\n", winner->nama);
                     system("pause");
                     break;
                 }
