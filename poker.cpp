@@ -9,6 +9,17 @@ program description: Program tugas besar mata kuliah Struktur Data dan Algoritma
 
 #include "poker.h"
 
+void title()
+{
+    puts(" ######    #####   ##   ##    ####   ###  ##  ######    #####   ##   ##    ####     ##     ##   ##");
+    puts("  ##  ##  ##   ##  ###  ##   ##  ##   ##  ##   ##  ##  ##   ##  ###  ##   ##  ##   ####    ###  ##");
+    puts("  ##  ##  ##   ##  #### ##  ##        ## ##    ##  ##  ##   ##  #### ##  ##       ##  ##   #### ##");
+    puts("  #####   ##   ##  ## ####  ##        ####     #####   ##   ##  ## ####  ##       ##  ##   ## ####");
+    puts("  ##      ##   ##  ##  ###  ##  ###   ## ##    ## ##   ##   ##  ##  ###  ##  ###  ######   ##  ###");
+    puts("  ##      ##   ##  ##   ##   ##  ##   ##  ##   ##  ##  ##   ##  ##   ##   ##  ##  ##  ##   ##   ##");
+    puts(" ####      #####   ##   ##    #####  ###  ##  #### ##   #####   ##   ##    #####  ##  ##   ##   ##");
+}
+
 char type_assign(int jenis)
 {
     char tipe;
@@ -474,55 +485,61 @@ void print_game_card(pointKartu *kartu)
     printf("\n");
 }
 
-int cek_aturan(nodeMeja *dek, int *highest)
+int cek_aturan(nodeMeja *dek, int *highest, int card)
 {
-    if (is_it_high_card(dek->llDeck, highest))
+    switch (card)
     {
-        puts("1");
-        return highCard;
-    }
-    else if (is_it_pair(dek->llDeck, highest))
-    {
-        puts("2");
-        return pair;
-    }
-    else if (is_it_three_of_a_kind(dek->llDeck, highest))
-    {
-        puts("3");
-        return threeOfaKind;
-    }
-    else if (is_it_straight(dek->llDeck, highest))
-    {
-        puts("4");
-        return straight;
-    }
-    else if (is_it_flush(dek->llDeck, highest))
-    {
-        puts("5");
-        return flush;
-    }
-    else if (is_it_full_house(dek->llDeck, highest))
-    {
-        puts("6");
-        return fullHouse;
-    }
-    else if (is_it_four_of_a_kind(dek->llDeck, highest))
-    {
-        puts("7");
-        return fourOfaKind;
-    }
-    else if (is_it_straight_flush(dek->llDeck, highest))
-    {
-        puts("8");
-        return straightFlush;
-    }
-    else if (is_it_royal_flush(dek->llDeck, highest))
-    {
-        puts("9");
-        return royalFlush;
-    }
-    else
-    {
+    case 1:
+        if (is_it_high_card(dek->llDeck, highest))
+        {
+            puts("1");
+            return highCard;
+        }
+    case 2:
+        if (is_it_pair(dek->llDeck, highest))
+        {
+            puts("2");
+            return pair;
+        }
+    case 3:
+        if (is_it_three_of_a_kind(dek->llDeck, highest))
+        {
+            puts("3");
+            return threeOfaKind;
+        }
+    case 4:
+        if (is_it_four_of_a_kind(dek->llDeck, highest))
+        {
+            puts("7");
+            return fourOfaKind;
+        }
+    case 5:
+        if (is_it_straight(dek->llDeck, highest))
+        {
+            puts("4");
+            return straight;
+        }
+        if (is_it_flush(dek->llDeck, highest))
+        {
+            puts("5");
+            return flush;
+        }
+        if (is_it_full_house(dek->llDeck, highest))
+        {
+            puts("6");
+            return fullHouse;
+        }
+        if (is_it_straight_flush(dek->llDeck, highest))
+        {
+            puts("8");
+            return straightFlush;
+        }
+        if (is_it_royal_flush(dek->llDeck, highest))
+        {
+            puts("9");
+            return royalFlush;
+        }
+    default:
         return 0;
     }
 }
@@ -539,12 +556,7 @@ bool is_it_high_card(pointKartu *deck, int *highest)
 
 bool is_it_pair(pointKartu *deck, int *highest)
 {
-    if (deck == NULL || deck->head == NULL || deck->head->next == NULL)
-    {
-        return false;
-    }
-
-    if (deck->head->nilaiKartu == deck->head->next->nilaiKartu && deck->head->next == deck->tail)
+    if (deck->head->nilaiKartu == deck->tail->nilaiKartu && deck->head->next == deck->tail)
     {
         *highest = deck->head->nilaiKartu;
         return true;
@@ -679,7 +691,6 @@ bool is_it_royal_flush(pointKartu *deck, int *highest)
     }
     return false;
 }
-
 int compare_Meja(nodeMeja *asli, nodeMeja *sementara)
 {
     int cekBreak = 0;
@@ -687,10 +698,10 @@ int compare_Meja(nodeMeja *asli, nodeMeja *sementara)
     // Jika cekBreak = 2, maka game akan selesai (bom)
     // Jika cekBreak = 1, maka akan terjadi perpindahan dari dek meja sementara menjadi dek meja asli
     // Jika cekBreak = 0, maka tidak akan terjadi perpindahan
-
     // Perbarui aturan untuk dek meja sementara
-    puts("ESSSSSSSSSSS");
-    sementara->aturan = cek_aturan(sementara, &(sementara->nilaiTertinggi));
+    int card = count_card(sementara->llDeck->head);
+    sementara->aturan = cek_aturan(sementara, &(sementara->nilaiTertinggi), card);
+    printf("%d <==\n\n", sementara->aturan);
     puts("ESSSSSSSSSSS");
 
     if (sementara->aturan != 0)
@@ -708,14 +719,14 @@ int compare_Meja(nodeMeja *asli, nodeMeja *sementara)
         }
         // Jika aturan dan nilai tertinggi dek meja asli dan sementara sama, atau nilai tertinggi sementara lebih tinggi,
         // maka terjadi perpindahan
-        else
+        else if (asli->aturan == sementara->aturan)
         {
             if (asli->aturan == fullHouse && asli->nilaiTertinggi < sementara->nilaiTertinggi)
             {
                 cekBreak = 1;
             }
-            else if (((asli->nilaiTertinggi == sementara->nilaiTertinggi) && (asli->llDeck->tail->tipeKartu < sementara->llDeck->tail->tipeKartu)) ||
-                     (asli->nilaiTertinggi < sementara->nilaiTertinggi))
+            if (((asli->nilaiTertinggi == sementara->nilaiTertinggi) && (asli->llDeck->tail->tipeKartu < sementara->llDeck->tail->tipeKartu)) ||
+                (asli->nilaiTertinggi < sementara->nilaiTertinggi))
             {
                 printf("%d <==> %d\n\n", asli->llDeck->tail->tipeKartu, sementara->llDeck->tail->tipeKartu);
                 cekBreak = 1;
@@ -786,7 +797,7 @@ bool computer_turn(nodeMeja *dekMeja, nodeMeja *dekTemp, nodePemain *com)
             }
 
         } while (!result);
-    }
+    }   
     else
     {
         switch (dekMeja->aturan)
@@ -798,7 +809,7 @@ bool computer_turn(nodeMeja *dekMeja, nodeMeja *dekTemp, nodePemain *com)
             }
             {
                 result = high_card_fight(llComb, dekMeja, dekTemp);
-                }
+            }
             break;
         case pair:
             result = two_cards_comb(llComb, dekMeja, dekTemp);
@@ -813,7 +824,7 @@ bool computer_turn(nodeMeja *dekMeja, nodeMeja *dekTemp, nodePemain *com)
             }
             else
             {
-                    result = five_cards_comb(llComb, dekMeja, dekTemp);
+                result = five_cards_comb(llComb, dekMeja, dekTemp);
             }
             break;
         }
@@ -1304,8 +1315,16 @@ int main()
             nodeMeja *dekTemp = NULL;
             /* start */
             system("cls");
-            printf("\t\t\tMasukkan Nama Pemain (MAX 9 Huruf): "); // nama player
-            scanf("%s", &playerName);
+            do
+            {
+                printf("\t\t\tMasukkan Nama Pemain (MAX 9 Huruf): "); // nama player
+                scanf("%s", &playerName);
+                if (!max_name(playerName))
+                {
+                    puts("\t\t\tMASUKKAN JUMLAH HURUF SESUAI INSTRUKSI"); // nama player
+                }
+
+            } while (!max_name(playerName));
             system("cls");
             fill_the_card(&dekLL);
             shuffle_deck(&dekLL);
@@ -1334,6 +1353,7 @@ int main()
                 {
                     puts("KOSONG\n\n");
                 }
+                printf("Kartu %s:\n", player->nama);
                 print_game_card(&(player)->kartu);
                 if (aktif != player)
                 {
@@ -1496,4 +1516,28 @@ void print_rule_table(nodeMeja *dekMeja)
         puts("ROYAL FLUSH");
         break;
     }
+}
+
+void help_combination_card()
+{
+    char filename[] = "aturan_poker.txt";
+    FILE *file = fopen(filename, "r");
+
+    char buffer[512];
+
+    while (fgets(buffer, sizeof(buffer), file) != NULL)
+    {
+        printf("%s", buffer);
+    }
+
+    fclose(file);
+}
+
+bool max_name(char name[])
+{
+    if (strlen(name) < 10)
+    {
+        return true;
+    }
+    return false;
 }

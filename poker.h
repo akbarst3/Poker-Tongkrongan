@@ -55,6 +55,7 @@ typedef struct nodeMeja {
     struct pointKartu *llDeck;
 } nodeMeja;
 
+void title();
 char type_assign (int jenis);
 void alloc_card (int nomor, int nilai, int jenis, nodeKartu **newNode);
 void fill_the_card(pointKartu *dekLL);
@@ -74,7 +75,7 @@ void display_player(nodeKartu *head);
 void print_game_computers(nodePemain *head, char nama[]);
 void print_game_card(pointKartu *kartu);
 
-int cek_aturan(nodeMeja *dek, int *highest);
+int cek_aturan(nodeMeja *dek, int *highest, int card);
 bool is_it_high_card(pointKartu *deck, int * highest);
 bool is_it_pair(pointKartu *deck, int *highest);
 bool is_it_three_of_a_kind(pointKartu *deck, int * highest);
@@ -100,7 +101,8 @@ void get_player_card(pointKartu *llPlayer, nodeMeja *dekTemp, int card);
 void alloc_deck(nodeMeja **dekMeja);
 void return_card(pointKartu *llTemp, pointKartu *llPlayer);
 void print_rule_table(nodeMeja *dekMeja);
-
+void help_combination_card();
+bool max_name(char name[]);
 
 // Pemain akan dibuat dalam bentuk circular singly linked list
 // Meja dan dek akan dibuat dalam bentuk linear singly linked list
