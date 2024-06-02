@@ -1321,7 +1321,8 @@ int main()
     int cekBreak, choice, round = 0;
     do
     {
-        printf("\n\n\n\t\t\tSELAMAT DATANG DI POKER TONGKRONGAN \n");
+        title();
+        puts("");
         printf("MENU :\n\n");
         printf("1. Start\n\n2. Help Menu\n\n3. History\n\n4. Exit\n\n\nPilih Menu: ");
         scanf("%d", &choice);
