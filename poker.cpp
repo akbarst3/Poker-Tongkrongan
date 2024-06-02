@@ -742,12 +742,10 @@ bool computer_turn(nodeMeja *dekMeja, nodeMeja *dekTemp, nodePemain *com)
         do
         {
             int choice = (rand() % 5) + 1;
-            printf("COBA %d\n", choice);
             switch (choice)
             {
             case 1:
             {
-                puts("TESSS SATU");
                 nodeKartu *tempHead = com->kartu.head;
                 if (tempHead != NULL)
                 {
@@ -763,28 +761,21 @@ bool computer_turn(nodeMeja *dekMeja, nodeMeja *dekTemp, nodePemain *com)
                     printf("\n\nKARTU %s HABIS\n\n", com->nama);
                     result = false;
                 }
-                puts("TESSS SATU");
                 break;
             }
             case 2:
             {
-                puts("TESSS DUA");
                 result = two_cards_comb(llComb, dekMeja, dekTemp);
-                puts("TESSS DUA");
                 break;
             }
             case 3:
             {
-                puts("TESSS TIGA");
                 result = three_cards_comb(llComb, dekMeja, dekTemp);
-                puts("TESSS TIGA");
                 break;
             }
             case 5:
             {
-                puts("TESSS LIMA");
                 result = five_cards_comb(llComb, dekMeja, dekTemp);
-                puts("TESSS LIMA");
                 break;
             }
             default:
@@ -801,49 +792,36 @@ bool computer_turn(nodeMeja *dekMeja, nodeMeja *dekTemp, nodePemain *com)
         switch (dekMeja->aturan)
         {
         case highCard:
-            puts("-----------------1");
             if (dekMeja->nilaiTertinggi == Poker)
             {
                 result = four_cards_comb(llComb, dekMeja, dekTemp);
             }
             {
                 result = high_card_fight(llComb, dekMeja, dekTemp);
-                puts("-----------------1");
-            }
-            puts("-----------------1");
+                }
             break;
         case pair:
-            puts("-----------------2");
             result = two_cards_comb(llComb, dekMeja, dekTemp);
-            puts("-----------------2");
             break;
         case threeOfaKind:
-            puts("-----------------3");
             result = three_cards_comb(llComb, dekMeja, dekTemp);
-            puts("-----------------3");
             break;
         default:
-            puts("-----------------5");
             if (four_cards_comb(llComb, dekMeja, dekTemp))
             {
                 result = true;
             }
             else
             {
-                puts("-----------------5");
-                result = five_cards_comb(llComb, dekMeja, dekTemp);
+                    result = five_cards_comb(llComb, dekMeja, dekTemp);
             }
-            puts("-----------------5");
             break;
         }
     }
     if (result)
     {
-        puts("FREEE MEMORYY");
         free_memory_deck(dekMeja);
-        puts("FREEE MEMORYY");
         get_ll_comb(com, llComb);
-        puts("FREEE MEMORYY");
         dekMeja->aturan = dekTemp->aturan;
         dekMeja->nilaiTertinggi = dekTemp->nilaiTertinggi;
         dekMeja->llDeck = dekTemp->llDeck;
@@ -881,7 +859,6 @@ bool five_cards_comb(pointKartu *llComb, nodeMeja *dekMeja, nodeMeja *dekTemp)
     bool result = false;
     if (dekMeja->aturan <= royalFlush && dekMeja->aturan >= straightFlush)
     {
-        puts("FIVE CARDS SPECIALL");
         set_tail(llComb, 5);
         while (llComb->tail != NULL)
         {
@@ -916,16 +893,12 @@ bool five_cards_comb(pointKartu *llComb, nodeMeja *dekMeja, nodeMeja *dekTemp)
             llComb->head = llComb->head->next;
             llComb->tail = llComb->tail->next;
         }
-        puts("FIVE CARDS SPECIALL");
     }
 
     if (!result)
     {
-        puts("FIVE CARDS B AJAH");
         llComb->head = temp;
         set_tail(llComb, 5);
-        printf("ATURAN %d\n", dekMeja->aturan);
-        puts("FIVE CARDS B AJAH");
         while (llComb->tail != NULL)
         {
             dekTemp->llDeck = llComb;
@@ -1001,7 +974,6 @@ bool five_cards_comb(pointKartu *llComb, nodeMeja *dekMeja, nodeMeja *dekTemp)
             llComb->head = llComb->head->next;
             llComb->tail = llComb->tail->next;
         }
-        puts("FIVE CARDS B AJAH");
     }
     if (!result)
     {
@@ -1072,7 +1044,6 @@ bool two_cards_comb(pointKartu *llComb, nodeMeja *dekMeja, nodeMeja *dekTemp)
     bool result = false;
     nodeKartu *temp = llComb->head;
     llComb->tail = llComb->head->next;
-    puts("PAIRRR");
     while (llComb->tail != NULL)
     {
         llComb->tail = llComb->head->next;
@@ -1116,7 +1087,6 @@ bool high_card_fight(pointKartu *llComb, nodeMeja *dekMeja, nodeMeja *dekTemp)
     while (llComb->head != NULL)
     {
         dekTemp->llDeck = llComb;
-        puts("COBA11");
         if (is_it_high_card(llComb, &(dekTemp->nilaiTertinggi)))
         {
             if (dekMeja->aturan == 0)
@@ -1128,7 +1098,6 @@ bool high_card_fight(pointKartu *llComb, nodeMeja *dekMeja, nodeMeja *dekTemp)
             }
             else
             {
-                printf("%d <==> %d\n\n", dekMeja->llDeck->head->tipeKartu, dekTemp->llDeck->head->tipeKartu);
                 if (((dekMeja->nilaiTertinggi == dekTemp->nilaiTertinggi) && (dekMeja->llDeck->tail->tipeKartu < llComb->tail->tipeKartu)) ||
                     (dekMeja->nilaiTertinggi < dekTemp->nilaiTertinggi))
                 {
@@ -1139,11 +1108,9 @@ bool high_card_fight(pointKartu *llComb, nodeMeja *dekMeja, nodeMeja *dekTemp)
                 }
             }
         }
-        puts("COBA11");
         llComb->head = llComb->head->next;
         llComb->tail = llComb->head;
     }
-    puts("COBA");
     if (!result)
     {
         llComb->head = temp;
