@@ -103,6 +103,8 @@ void return_card(pointKartu *llTemp, pointKartu *llPlayer);
 void print_rule_table(nodeMeja *dekMeja);
 void help_combination_card();
 bool max_name(char name[]);
+void cards_out(pointKartu *llOut);
+
 
 // Pemain akan dibuat dalam bentuk circular singly linked list
 // Meja dan dek akan dibuat dalam bentuk linear singly linked list

@@ -700,10 +700,8 @@ int compare_Meja(nodeMeja *asli, nodeMeja *sementara)
     // Jika cekBreak = 0, maka tidak akan terjadi perpindahan
     // Perbarui aturan untuk dek meja sementara
     int card = count_card(sementara->llDeck->head);
+    printf("%d\n", card);
     sementara->aturan = cek_aturan(sementara, &(sementara->nilaiTertinggi), card);
-    printf("%d <==\n\n", sementara->aturan);
-    puts("ESSSSSSSSSSS");
-
     if (sementara->aturan != 0)
     {
         // Jika dek meja asli tidak memiliki aturan, maka terjadi perpindahan
@@ -728,7 +726,6 @@ int compare_Meja(nodeMeja *asli, nodeMeja *sementara)
             if (((asli->nilaiTertinggi == sementara->nilaiTertinggi) && (asli->llDeck->tail->tipeKartu < sementara->llDeck->tail->tipeKartu)) ||
                 (asli->nilaiTertinggi < sementara->nilaiTertinggi))
             {
-                printf("%d <==> %d\n\n", asli->llDeck->tail->tipeKartu, sementara->llDeck->tail->tipeKartu);
                 cekBreak = 1;
             }
         }
@@ -797,9 +794,10 @@ bool computer_turn(nodeMeja *dekMeja, nodeMeja *dekTemp, nodePemain *com)
             }
 
         } while (!result);
-    }   
+    }
     else
     {
+        int gambling;
         switch (dekMeja->aturan)
         {
         case highCard:
@@ -808,11 +806,34 @@ bool computer_turn(nodeMeja *dekMeja, nodeMeja *dekTemp, nodePemain *com)
                 result = four_cards_comb(llComb, dekMeja, dekTemp);
             }
             {
-                result = high_card_fight(llComb, dekMeja, dekTemp);
+                if (dekMeja->llDeck->head->nilaiKartu > 11)
+                {
+                    gambling = rand() % 2;
+                    if (gambling)
+                    {
+                        result = high_card_fight(llComb, dekMeja, dekTemp);
+                    }
+                }
+                else
+                {
+                    result = high_card_fight(llComb, dekMeja, dekTemp);
+                }
             }
             break;
         case pair:
-            result = two_cards_comb(llComb, dekMeja, dekTemp);
+            if (dekMeja->llDeck->tail->nilaiKartu > 13)
+            {
+                gambling = rand() % 2;
+                if (gambling)
+                {
+                    result = two_cards_comb(llComb, dekMeja, dekTemp);
+                }
+            }
+            else
+            {
+                result = two_cards_comb(llComb, dekMeja, dekTemp);
+            }
+
             break;
         case threeOfaKind:
             result = three_cards_comb(llComb, dekMeja, dekTemp);
@@ -1288,13 +1309,15 @@ void alloc_deck(nodeMeja **deck)
 {
     *deck = (nodeMeja *)malloc(sizeof(nodeMeja));
     (*deck)->llDeck = NULL;
+    // (*deck)->llDeck->head = NULL;
+    // (*deck)->llDeck->tail = NULL;
     (*deck)->aturan = 0;
     (*deck)->nilaiTertinggi = 0;
 }
 
 int main()
 {
-    int cekBreak, choice, round;
+    int cekBreak, choice, round = 0, pos = 4;
     do
     {
         printf("\n\n\n\t\t\tSELAMAT DATANG DI POKER TONGKRONGAN \n");
@@ -1313,6 +1336,7 @@ int main()
             nodePemain *player = NULL;
             nodeMeja *dekMeja = NULL;
             nodeMeja *dekTemp = NULL;
+            pointKartu llOut = {NULL, NULL};
             /* start */
             system("cls");
             do
@@ -1353,6 +1377,22 @@ int main()
                 {
                     puts("KOSONG\n\n");
                 }
+                // puts("KARTU YANG SUDAH KELUAR:");
+                // if (llOut.head != NULL && llOut.tail != NULL)
+                // {
+                //     llOut.tail->next = dekMeja->llDeck->head;
+                //     llOut.tail = dekMeja->llDeck->tail;
+                //     cards_out(&llOut);
+                // }
+                // else
+                // {
+                //     if (dekMeja->llDeck->head != NULL && dekMeja->llDeck->tail != NULL)
+                //     {
+                //         llOut.head = dekMeja->llDeck->head;
+                //         llOut.tail = dekMeja->llDeck->tail;
+                //     }
+                //     puts("BELUM ADA KARTU YANG KELUAR");
+                // }
                 printf("Kartu %s:\n", player->nama);
                 print_game_card(&(player)->kartu);
                 if (aktif != player)
@@ -1393,7 +1433,6 @@ int main()
                         fight = player_turn(player, dekTemp);
                         if (fight)
                         {
-                            puts("TESSSSSSS");
                             cekBreak = compare_Meja(dekMeja, dekTemp);
                             switch (cekBreak)
                             {
@@ -1417,6 +1456,16 @@ int main()
                                 dekMeja->aturan = dekTemp->aturan;
                                 dekMeja->nilaiTertinggi = dekTemp->nilaiTertinggi;
                                 winner = player;
+                                if (player->kartu.head == NULL && player->kartu.tail == NULL)
+                                {
+                                    puts("TES MENANG");
+                                    nodePemain *countPos = player;
+                                    while (countPos->next != player)
+                                    {
+                                        pos--;
+                                        countPos = countPos->next;
+                                    }
+                                }
                                 break;
                             case 2:
                                 winner = player;
@@ -1450,6 +1499,12 @@ int main()
 
                 // system("cls");
             } while ((player->kartu.head && player->next != NULL));
+            free_memory_deck(dekMeja);
+            free_memory_deck(dekTemp);
+            free(aktif);
+            free(com);
+            free(dekAktif);
+            free(player);
             break;
 
             // case 2:
@@ -1540,4 +1595,19 @@ bool max_name(char name[])
         return true;
     }
     return false;
+}
+
+void cards_out(pointKartu *llOut)
+{
+    nodeKartu *current = llOut->head;
+    while (current != NULL)
+    {
+        printf("%d%c", current->nilaiKartu, current->tipeKartu);
+        if (current->next != NULL)
+        {
+            printf(" -> ");
+        }
+        current = current->next;
+    }
+    printf(" -> NULL\n");
 }
