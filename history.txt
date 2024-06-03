@@ -1,0 +1,4 @@
+Player: zaki
+Ronde: 2
+Posisi: 2
+

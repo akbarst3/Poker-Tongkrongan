@@ -103,7 +103,6 @@ void return_card(pointKartu *llTemp, pointKartu *llPlayer);
 void print_rule_table(nodeMeja *dekMeja);
 void help_combination_card();
 bool max_name(char name[]);
-void cards_out(pointKartu *llOut);
 void print_win(int pos);
 void write_history(char *filename, int round, int pos, char *playerName);
 void view_history();

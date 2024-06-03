@@ -1,0 +1,81 @@
+Daftar Aturan Kartu
+
+1. Royal Flush (Kombinasi lima kartu dengan nilai tertinggi dalam satu jenis (10, J, Q, K, A))
+ =========   ========    ========     ========     ========
+|10     A|  |11     A|  |12     A|   |13     A|   |14     A|
+|        |  |        |  |        |   |        |   |        |
+|        |  |        |  |        |   |        |   |        |
+|A     10|  |A     11|  |A     12|   |A     13|   |A     14|
+ ========    ========    ========     ========     ========
+
+2. Straight Flush (Lima kartu berurutan dalam satu jenis)
+ ========    ========    ========     ========     ========
+|5      C|  |6      C|  |7      C|   |8      C|   |9      C|
+|        |  |        |  |        |   |        |   |        |
+|        |  |        |  |        |   |        |   |        |
+|C      5|  |C      6|  |C      7|   |C      8|   |C      9|
+ ========    ========    ========     ========     ========
+
+3. Four of A Kind (Empat kartu dengan nilai yang sama)
+ ========    ========    ========     ========
+|9      A|  |9      B|  |9      C|   |9      D|
+|        |  |        |  |        |   |        |
+|        |  |        |  |        |   |        |
+|A      9|  |B      9|  |C      9|   |D      9|
+ ========    ========    ========     ======== 
+
+4. Full House ( Kombinasi dari tiga kartu dengan nilai yang sama dan dua kartu lainnya dengan nilai yang sama)
+ ========    ========    ========     ========     ========
+|5      B|  |5      D|  |12     A|   |12     B|   |12     D|
+|        |  |        |  |        |   |        |   |        |
+|        |  |        |  |        |   |        |   |        |
+|B      5|  |D      5|  |A     12|   |B     12|   |D     12|
+ ========    ========    ========     ========     ========
+
+5. Flush (Lima kartu dengan jenis yang sama, tetapi tidak berurutan)
+ ========    ========    ========     ========     ========
+|4      A|  |6      A|  |7      A|   |10     A|   |11     A|
+|        |  |        |  |        |   |        |   |        |
+|        |  |        |  |        |   |        |   |        |
+|A      4|  |A      6|  |A      7|   |A     10|   |A     11|
+ ========    ========    ========     ========     ========
+
+6. Straight (Lima kartu berurutan dalam jenis yang berbeda)
+ ========    ========    ========     ========     ========
+|4      A|  |6      A|  |7      A|   |10     A|   |11     A|
+|        |  |        |  |        |   |        |   |        |
+|        |  |        |  |        |   |        |   |        |
+|A      4|  |A      6|  |A      7|   |A     10|   |A     11|
+ ========    ========    ========     ========     ========
+
+7. Three of a Kind (Tiga kartu dengan nilai yang sama)
+ ========    ========    ========
+|8      B|  |8      C|  |8      D|
+|        |  |        |  |        |
+|        |  |        |  |        |
+|B      8|  |C      8|  |D      8|
+ ========    ========    ======== 
+
+8. Two Pair (Dua pasang kartu dengan nilai yang sama)
+ ========    ========    ========     ========
+|9      A|  |9      D|  |13     C|   |13     D|
+|        |  |        |  |        |   |        |
+|        |  |        |  |        |   |        | 
+|A      9|  |D      9|  |C     13|   |D     13|
+ ========    ========    ========     ======== 
+
+9. One Pair (Satu pasang kartu dengan nilai yang sama)
+ ========    ======== 
+|10     B|  |10     C|
+|        |  |        |
+|        |  |        |
+|B     10|  |C     10|
+ ========    ======== 
+
+10. High Card (Kartu tertinggi ketika tidak ada kombinasi lain yang terbentuk)
+ ========
+|7      B|
+|        |
+|        |
+|B      7|
+ ======== 

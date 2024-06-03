@@ -692,7 +692,6 @@ int compare_Meja(nodeMeja *asli, nodeMeja *sementara)
     // Jika cekBreak = 0, maka tidak akan terjadi perpindahan
     // Perbarui aturan untuk dek meja sementara
     int card = count_card(sementara->llDeck->head);
-    printf("%d\n", card);
     sementara->aturan = cek_aturan(sementara, &(sementara->nilaiTertinggi), card);
     if (sementara->aturan != 0)
     {
@@ -1307,217 +1306,6 @@ void alloc_deck(nodeMeja **deck)
     (*deck)->nilaiTertinggi = 0;
 }
 
-int main()
-{
-    int cekBreak, choice, round = 0;
-    do
-    {
-        title();
-        puts("\n\n\n");
-        system("pause");
-        system("cls");
-        printf("\n\n\n\t\t\tSELAMAT DATANG DI POKER TONGKRONGAN \n");
-        printf("MENU :\n\n");
-        printf("1. Start\n\n2. Help Menu\n\n3. History\n\n4. Exit\n\n\nPilih Menu: ");
-        scanf("%d", &choice);
-
-        switch (choice)
-        {
-        case 1:
-            char playerName[10];
-            int pos = 5;
-            pointKartu dekLL = {NULL, NULL};
-            nodePemain *aktif = NULL;
-            nodePemain *com = NULL;
-            pointKartu *dekAktif = NULL;
-            nodePemain *player = NULL;
-            nodeMeja *dekMeja = NULL;
-            nodeMeja *dekTemp = NULL;
-            pointKartu llOut = {NULL, NULL};
-            /* start */
-            system("cls");
-            do
-            {
-                printf("\t\t\tMasukkan Nama Pemain (MAX 9 Huruf): "); // nama player
-                scanf("%s", &playerName);
-                if (!max_name(playerName))
-                {
-                    puts("\t\t\tMASUKKAN JUMLAH HURUF SESUAI INSTRUKSI"); // nama player
-                }
-
-            } while (!max_name(playerName));
-            system("cls");
-            fill_the_card(&dekLL);
-            shuffle_deck(&dekLL);
-            create_player(&aktif, playerName);
-            player = aktif;
-            com = aktif->next;
-            fill_deck(&aktif, &dekLL);
-            aktif = first_play(aktif);
-            alloc_deck(&dekMeja);
-            alloc_deck(&dekTemp);
-            nodePemain *winner = aktif;
-            printf("PERTAMA MAIN : %s\n\n", aktif->nama);
-            bool fight = false;
-            do
-            {
-                print_game_computers(com, playerName);
-                puts("\n\nDEK MEJA :");
-                if (dekMeja->llDeck != NULL)
-                {
-                    print_game_card(dekMeja->llDeck);
-                    print_rule_table(dekMeja);
-                    printf("%s\n", winner->nama);
-                    puts("\n");
-                }
-                else
-                {
-                    puts("KOSONG\n\n");
-                }
-                // puts("KARTU YANG SUDAH KELUAR:");
-                // if (llOut.head != NULL && llOut.tail != NULL)
-                // {
-                //     llOut.tail->next = dekMeja->llDeck->head;
-                //     llOut.tail = dekMeja->llDeck->tail;
-                //     cards_out(&llOut);
-                // }
-                // else
-                // {
-                //     if (dekMeja->llDeck->head != NULL && dekMeja->llDeck->tail != NULL)
-                //     {
-                //         llOut.head = dekMeja->llDeck->head;
-                //         llOut.tail = dekMeja->llDeck->tail;
-                //     }
-                //     puts("BELUM ADA KARTU YANG KELUAR");
-                // }
-                printf("Kartu %s:\n", player->nama);
-                print_game_card(&(player)->kartu);
-                if (aktif != player)
-                {
-                    if (aktif->kartu.head != NULL && aktif->kartu.head)
-                    {
-                        printf("\n%s sedang berpikir...\n", aktif->nama);
-                        system("pause\n");
-                        fight = computer_turn(dekMeja, dekTemp, aktif);
-                        if (fight)
-                        {
-                            winner = aktif;
-                        }
-                        else
-                        {
-                            printf("\n%s skip\n", aktif->nama);
-                        }
-                    }
-                    else
-                    {
-                        nodePemain *prev = aktif;
-                        while (prev->next != aktif)
-                        {
-                            prev = prev->next;
-                        }
-                        prev->next = aktif->next;
-                        nodePemain *temp = aktif;
-                        aktif = prev;
-                        free(temp);
-                    }
-                }
-                else
-                {
-                    fight = false;
-                    do
-                    {
-                        free_memory_deck(dekTemp);
-                        fight = player_turn(player, dekTemp);
-                        if (fight)
-                        {
-                            cekBreak = compare_Meja(dekMeja, dekTemp);
-                            switch (cekBreak)
-                            {
-                            case 0:
-                                return_card(dekTemp->llDeck, &(player)->kartu);
-                                printf("KARTU YANG DIPILIH TIDAK BISA MELAWAN, PILIH KARTU LAIN? (y/n): ");
-                                scanf(" %c", &choice);
-                                if (choice == 'y')
-                                {
-                                    fight = false;
-                                    continue;
-                                }
-                                else if (choice == 'n')
-                                {
-                                    break;
-                                }
-                                break;
-                            case 1:
-                                free_memory_deck(dekMeja);
-                                dekMeja->llDeck = dekTemp->llDeck;
-                                dekMeja->aturan = dekTemp->aturan;
-                                dekMeja->nilaiTertinggi = dekTemp->nilaiTertinggi;
-                                winner = player;
-                                if (player->kartu.head == NULL && player->kartu.tail == NULL)
-                                {
-                                    nodePemain *countPos = player;
-                                    do
-                                    {
-                                        pos--;
-                                        countPos = countPos->next;
-                                    } while (countPos != player);
-                                    system("cls");
-                                    print_win(pos);
-                                    system("pause");
-                                    system("cls");
-                                }
-                                break;
-                            case 2:
-                                winner = player;
-                                break;
-                            }
-                        }
-                        else
-                        {
-                            break;
-                        }
-                        if (cekBreak == 0 || cekBreak == 1)
-                        {
-                            dekTemp->llDeck = NULL;
-                        }
-
-                    } while (!fight);
-                }
-                aktif = aktif->next;
-                if (aktif == winner)
-                {
-                    if (winner == player)
-                        round++;
-                    free_memory_deck(dekMeja);
-                }
-                if (dekMeja->aturan == 7)
-                {
-                    printf("BOM! PERMAINAN BERAKHIR, %s MENANG\n", winner->nama);
-                    system("pause");
-                    break;
-                }
-                system("cls");
-            } while ((player->kartu.head && player->next != NULL));
-            free_memory_deck(dekMeja);
-            free_memory_deck(dekTemp);
-            free(aktif);
-            free(com);
-            free(dekAktif);
-            free(player);
-            break;
-
-            // case 2:
-            //     // help
-            //     break;
-            // case 3:
-            //     // history
-            //     break;
-            // default:
-            //     break;
-        }
-    } while (choice != 4);
-}
-
 void return_card(pointKartu *llTemp, pointKartu *llPlayer)
 {
     nodeKartu *temp2 = llTemp->head;
@@ -1596,21 +1384,6 @@ bool max_name(char name[])
     return false;
 }
 
-void cards_out(pointKartu *llOut)
-{
-    nodeKartu *current = llOut->head;
-    while (current != NULL)
-    {
-        printf("%d%c", current->nilaiKartu, current->tipeKartu);
-        if (current->next != NULL)
-        {
-            printf(" -> ");
-        }
-        current = current->next;
-    }
-    printf(" -> NULL\n");
-}
-
 void print_win(int pos)
 {
     switch (pos)
@@ -1633,6 +1406,7 @@ void print_win(int pos)
         puts(" ##  ###  ##   ##    ##                   ##   ## #    ##       ##   ##  ##  ###   ##  ##");
         puts("  ##  ##  ##   ##    ##              ##   ##   ##   #   ##  ##  ##   ##  ##   ##   ## ##");
         puts("   #####   #####    ####              #####   #######    ####    #####   ##   ##  ####");
+        break;
     case 3:
         puts("   ##     ##   ##           ##  ##    #####   ##   ##           ######   ##   ##   ####    ######   #####");
         puts("  ####    ##   ##           ##  ##   ##   ##  ##   ##           # ## #   ##   ##    ##      ##  ##   ## ##");
@@ -1641,6 +1415,7 @@ void print_win(int pos)
         puts(" ######   ##   ##             ##     ##   ##  ##   ##             ##     ##   ##    ##      ## ##    ##  ##");
         puts(" ##  ##   ##   ##             ##     ##   ##  ##   ##             ##     ##   ##    ##      ##  ##   ## ##");
         puts(" ##  ##   ##   ##            ####     #####    #####             ####    ##   ##   ####    #### ##  #####");
+        break;
     case 4: 
         puts(" ####      #####    #####   #######  ######");
         puts("  ##      ##   ##  ##   ##   ##   #   ##  ##");
@@ -1649,6 +1424,7 @@ void print_win(int pos)
         puts("  ##   #  ##   ##       ##   ## #     ## ##");
         puts("  ##  ##  ##   ##  ##   ##   ##   #   ##  ##             ##       ##       ##");
         puts(" #######   #####    #####   #######  #### ##             ##       ##       ##");
+        break;
     default:
         break;
     }
