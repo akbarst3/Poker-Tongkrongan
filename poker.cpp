@@ -1499,8 +1499,7 @@ int main()
                     system("pause");
                     break;
                 }
-
-                // system("cls");
+                system("cls");
             } while ((player->kartu.head && player->next != NULL));
             free_memory_deck(dekMeja);
             free_memory_deck(dekTemp);
