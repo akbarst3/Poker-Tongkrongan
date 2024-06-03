@@ -2,3 +2,11 @@ Player: zaki
 Ronde: 2
 Posisi: 2
 
+Player: faad
+Ronde: 3
+Posisi: 1
+
+Player: jaki
+Ronde: 7
+Posisi: 5
+

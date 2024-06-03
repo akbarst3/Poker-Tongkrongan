@@ -200,7 +200,6 @@ int main()
         case 3:
         {
             view_history();
-            system("pause");
             system("cls");
             break;
         }

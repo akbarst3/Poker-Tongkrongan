@@ -581,14 +581,25 @@ bool is_it_three_of_a_kind(pointKartu *deck, int *highest)
 bool is_it_straight(pointKartu *deck, int *highest)
 {
     nodeKartu *temp = deck->head;
+    puts("STRAIGHTTT");
     while (temp != deck->tail->next)
     {
-        if (temp->nilaiKartu + 1 != temp->next->nilaiKartu)
+        if (temp->next != NULL)
         {
-            return false;
+            if (temp->nilaiKartu + 1 != temp->next->nilaiKartu)
+            {
+                return false;
+            }
         }
+        else
+        {
+            break;
+        }
+
+        printf("%d <==> %d\n", temp->nilaiKartu, temp->next->nilaiKartu);
         temp = temp->next;
     }
+    puts("STRAIGHTTT");
     *highest = deck->tail->nilaiKartu;
     return true;
 }
@@ -598,10 +609,18 @@ bool is_it_flush(pointKartu *deck, int *highest)
     nodeKartu *temp = deck->head;
     while (temp != deck->tail->next)
     {
-        if (temp->tipeKartu != temp->next->tipeKartu)
+        if (temp->next != NULL)
         {
-            return false;
+            if (temp->tipeKartu != temp->next->tipeKartu)
+            {
+                return false;
+            }
         }
+        else
+        {
+            break;
+        }
+
         temp = temp->next;
     }
     *highest = deck->tail->nilaiKartu;
@@ -1204,46 +1223,53 @@ bool player_turn(nodePemain *player, nodeMeja *dekTemp)
             {
                 int card;
                 printf("Pilih nomor kartu: ");
-                scanf(" %d", &card);
-                get_player_card(&(player->kartu), dekTemp, card);
-                if (dekTemp->llDeck == NULL || dekTemp->llDeck->head == NULL)
+                validInput = scanf(" %d", &card);
+                if (validInput)
                 {
-                    printf("KARTU DENGAN NOMOR %d TIDAK DITEMUKAN! PILIH KARTU LAIN\n\n", card);
-                }
-                else
-                {
-                    puts("KARTU SEMENTARA YANG DIPILIH : ");
-                    if (dekTemp->llDeck == NULL)
+                    get_player_card(&(player->kartu), dekTemp, card);
+                    if (dekTemp->llDeck == NULL || dekTemp->llDeck->head == NULL)
                     {
-                        puts("kosong\n");
+                        printf("KARTU DENGAN NOMOR %d TIDAK DITEMUKAN! PILIH KARTU LAIN\n\n", card);
                     }
                     else
                     {
-                        print_game_card(dekTemp->llDeck);
-                    }
-                    do
-                    {
-                        printf("Taruh kartu? (y/n): ");
-                        scanf(" %c", &choice);
-                        switch (choice)
+                        puts("KARTU SEMENTARA YANG DIPILIH : ");
+                        if (dekTemp->llDeck == NULL)
                         {
-                        case 'y':
+                            puts("kosong\n");
+                        }
+                        else
                         {
+                            print_game_card(dekTemp->llDeck);
+                        }
+                        do
+                        {
+                            printf("Taruh kartu? (y/n): ");
+                            scanf(" %c", &choice);
+                            switch (choice)
+                            {
+                            case 'y':
+                            {
 
-                            fight = true;
-                            break;
-                        }
-                        case 'n':
-                        {
-                            break;
-                        }
-                        default:
-                        {
-                            puts("Input salah. Harap masukkan 'y' atau 'n'.");
-                            break;
-                        }
-                        }
-                    } while (choice != 'n' && choice != 'y');
+                                fight = true;
+                                break;
+                            }
+                            case 'n':
+                            {
+                                break;
+                            }
+                            default:
+                            {
+                                puts("Input salah. Harap masukkan 'y' atau 'n'.");
+                                break;
+                            }
+                            }
+                        } while (choice != 'n' && choice != 'y');
+                    }
+                }
+                else
+                {
+                    while (getchar() != '\n');
                 }
             } while (!fight);
             return true;
@@ -1416,7 +1442,7 @@ void print_win(int pos)
         puts(" ##  ##   ##   ##             ##     ##   ##  ##   ##             ##     ##   ##    ##      ##  ##   ## ##");
         puts(" ##  ##   ##   ##            ####     #####    #####             ####    ##   ##   ####    #### ##  #####");
         break;
-    case 4: 
+    case 4:
         puts(" ####      #####    #####   #######  ######");
         puts("  ##      ##   ##  ##   ##   ##   #   ##  ##");
         puts("  ##      ##   ##  ##        ## #     ##  ##");
@@ -1430,10 +1456,11 @@ void print_win(int pos)
     }
 }
 
-void write_history(char *filename, int round, int pos, char *playerName) 
+void write_history(char *filename, int round, int pos, char *playerName)
 {
     FILE *file = fopen(filename, "a");
-    if (file == NULL) {
+    if (file == NULL)
+    {
         printf("History Tidak Ditemukan.\n");
         return;
     }
@@ -1446,12 +1473,16 @@ void view_history()
     system("cls");
     FILE *file = fopen("history.txt", "r");
 
-    if (file == NULL) {
+    if (file == NULL)
+    {
         printf("History Tidak Ditemukan.\n");
-    } else {
+    }
+    else
+    {
         char line[256];
-        while (fgets(line, sizeof(line), file) != NULL) {
-            printf("%s", line);  
+        while (fgets(line, sizeof(line), file) != NULL)
+        {
+            printf("%s", line);
         }
         fclose(file);
     }
