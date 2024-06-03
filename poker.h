@@ -104,7 +104,9 @@ void print_rule_table(nodeMeja *dekMeja);
 void help_combination_card();
 bool max_name(char name[]);
 void cards_out(pointKartu *llOut);
-
+void print_win(int pos);
+void write_history(char *filename, int round, int pos, char *playerName);
+void view_history();
 
 // Pemain akan dibuat dalam bentuk circular singly linked list
 // Meja dan dek akan dibuat dalam bentuk linear singly linked list

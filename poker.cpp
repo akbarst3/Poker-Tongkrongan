@@ -492,55 +492,46 @@ int cek_aturan(nodeMeja *dek, int *highest, int card)
     case 1:
         if (is_it_high_card(dek->llDeck, highest))
         {
-            puts("1");
             return highCard;
         }
         break;
     case 2:
         if (is_it_pair(dek->llDeck, highest))
         {
-            puts("2");
             return pair;
         }
         break;
     case 3:
         if (is_it_three_of_a_kind(dek->llDeck, highest))
         {
-            puts("3");
             return threeOfaKind;
         }
         break;
     case 4:
         if (is_it_four_of_a_kind(dek->llDeck, highest))
         {
-            puts("7");
             return fourOfaKind;
         }
         break;
     case 5:
         if (is_it_straight(dek->llDeck, highest))
         {
-            puts("4");
             return straight;
         }
         if (is_it_flush(dek->llDeck, highest))
         {
-            puts("5");
             return flush;
         }
         if (is_it_full_house(dek->llDeck, highest))
         {
-            puts("6");
             return fullHouse;
         }
         if (is_it_straight_flush(dek->llDeck, highest))
         {
-            puts("8");
             return straightFlush;
         }
         if (is_it_royal_flush(dek->llDeck, highest))
         {
-            puts("9");
             return royalFlush;
         }
         break;
@@ -1321,6 +1312,10 @@ int main()
     int cekBreak, choice, round = 0;
     do
     {
+        title();
+        puts("\n\n\n");
+        system("pause");
+        system("cls");
         printf("\n\n\n\t\t\tSELAMAT DATANG DI POKER TONGKRONGAN \n");
         printf("MENU :\n\n");
         printf("1. Start\n\n2. Help Menu\n\n3. History\n\n4. Exit\n\n\nPilih Menu: ");
@@ -1463,11 +1458,13 @@ int main()
                                     nodePemain *countPos = player;
                                     do
                                     {
-                                        puts("TES MENANG");
                                         pos--;
-                                        printf("POS %d\n", pos);
                                         countPos = countPos->next;
                                     } while (countPos != player);
+                                    system("cls");
+                                    print_win(pos);
+                                    system("pause");
+                                    system("cls");
                                 }
                                 break;
                             case 2:
@@ -1612,4 +1609,78 @@ void cards_out(pointKartu *llOut)
         current = current->next;
     }
     printf(" -> NULL\n");
+}
+
+void print_win(int pos)
+{
+    switch (pos)
+    {
+    case 1:
+        puts(" ##  ##    #####   ##   ##           ##   ##   ####    ##   ##");
+        puts(" ##  ##   ##   ##  ##   ##           ##   ##    ##     ###  ##");
+        puts(" ##  ##   ##   ##  ##   ##           ##   ##    ##     #### ##");
+        puts("  ####    ##   ##  ##   ##           ## # ##    ##     ## ####");
+        puts("  ####    ##   ##  ##   ##           ## # ##    ##     ## ####");
+        puts("   ##     ##   ##  ##   ##           #######    ##     ##  ###");
+        puts("   ##     ##   ##  ##   ##           ### ###    ##     ##   ##");
+        puts("  ####     #####    #####            ##   ##   ####    ##   ##");
+        break;
+    case 2:
+        puts("   ####    #####   ######             #####   #######    ####    #####   ##   ##  #####");
+        puts("  ##  ##  ##   ##  # ## #            ##   ##   ##   #   ##  ##  ##   ##  ###  ##   ## ##");
+        puts(" ##       ##   ##    ##              ##        ## #    ##       ##   ##  #### ##   ##  ##");
+        puts(" ##       ##   ##    ##               #####    ####    ##       ##   ##  ## ####   ##  ##");
+        puts(" ##  ###  ##   ##    ##                   ##   ## #    ##       ##   ##  ##  ###   ##  ##");
+        puts("  ##  ##  ##   ##    ##              ##   ##   ##   #   ##  ##  ##   ##  ##   ##   ## ##");
+        puts("   #####   #####    ####              #####   #######    ####    #####   ##   ##  ####");
+    case 3:
+        puts("   ##     ##   ##           ##  ##    #####   ##   ##           ######   ##   ##   ####    ######   #####");
+        puts("  ####    ##   ##           ##  ##   ##   ##  ##   ##           # ## #   ##   ##    ##      ##  ##   ## ##");
+        puts(" ##  ##   ##   ##           ##  ##   ##   ##  ##   ##             ##     ##   ##    ##      ##  ##   ##  ##");
+        puts(" ##  ##   #######            ####    ##   ##  ##   ##             ##     #######    ##      #####    ##  ##");
+        puts(" ######   ##   ##             ##     ##   ##  ##   ##             ##     ##   ##    ##      ## ##    ##  ##");
+        puts(" ##  ##   ##   ##             ##     ##   ##  ##   ##             ##     ##   ##    ##      ##  ##   ## ##");
+        puts(" ##  ##   ##   ##            ####     #####    #####             ####    ##   ##   ####    #### ##  #####");
+    case 4: 
+        puts(" ####      #####    #####   #######  ######");
+        puts("  ##      ##   ##  ##   ##   ##   #   ##  ##");
+        puts("  ##      ##   ##  ##        ## #     ##  ##");
+        puts("  ##      ##   ##   #####    ####     #####");
+        puts("  ##   #  ##   ##       ##   ## #     ## ##");
+        puts("  ##  ##  ##   ##  ##   ##   ##   #   ##  ##             ##       ##       ##");
+        puts(" #######   #####    #####   #######  #### ##             ##       ##       ##");
+    default:
+        break;
+    }
+}
+
+void write_history(char *filename, int round, int pos, char *playerName) 
+{
+    FILE *file = fopen(filename, "a");
+    if (file == NULL) {
+        printf("History Tidak Ditemukan.\n");
+        return;
+    }
+    fprintf(file, "Player: %s\nRonde: %d\nPosisi: %d\n\n", playerName, round, pos);
+    fclose(file);
+}
+
+void view_history()
+{
+    system("cls");
+    FILE *file = fopen("history.txt", "r");
+
+    if (file == NULL) {
+        printf("History Tidak Ditemukan.\n");
+    } else {
+        char line[256];
+        while (fgets(line, sizeof(line), file) != NULL) {
+            printf("%s", line);  
+        }
+        fclose(file);
+    }
+    puts("");
+    puts("");
+    system("pause");
+    system("cls");
 }
